@@ -11,8 +11,9 @@ export async function GET(request: NextRequest) {
   const search = searchParams.get('search');
 
   let lastUpdated: string | null = null;
+  const supabaseManagers = new Map<string, string>();
 
-  // Try Supabase first
+  // Try Supabase for metadata and fund managers
   try {
     const supabase = getSupabase();
 
@@ -26,12 +27,28 @@ export async function GET(request: NextRequest) {
     if (meta) {
       lastUpdated = meta.last_updated;
     }
+
+    // Get latest fund managers from Supabase (scraped from hdfcfund.com)
+    const { data: dbFunds } = await supabase
+      .from('funds')
+      .select('id, fund_manager');
+
+    if (dbFunds) {
+      for (const f of dbFunds) {
+        if (f.fund_manager) {
+          supabaseManagers.set(f.id, f.fund_manager);
+        }
+      }
+    }
   } catch {
-    // Supabase unavailable, will use static data
+    // Supabase unavailable, will use static data entirely
   }
 
-  // Use static data (always available, updated by cron via refreshAllFunds)
-  let funds = [...HDFC_FUNDS];
+  // Use static data with Supabase manager overrides
+  let funds = HDFC_FUNDS.map((f) => {
+    const dbManager = supabaseManagers.get(f.id);
+    return dbManager ? { ...f, fundManager: dbManager } : f;
+  });
 
   if (category) {
     funds = funds.filter((f) => f.category === category);

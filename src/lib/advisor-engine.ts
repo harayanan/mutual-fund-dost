@@ -180,6 +180,7 @@ export interface FundBasket {
   recommendations: FundRecommendation[];
   totalFunds: number;
   wisdomNote: string;
+  profileSummary: string;
 }
 
 /**
@@ -528,6 +529,21 @@ export function recommendFundBasket(riskLevel: SEBIRiskLevel): FundBasket {
       break;
   }
 
+  const profileSummaries: Record<SEBIRiskLevel, string> = {
+    'Very High':
+      `You're someone who thinks long-term and doesn't lose sleep over market dips. That's a rare and powerful trait. We've built you a bold, equity-heavy basket (${allocation.equity}% equity) with a mix of diversified, mid-cap, and small-cap funds that can truly compound over a decade. The small allocation to debt isn't for returns — it's dry powder to rebalance when markets correct. This basket is designed for the patient investor who understands that the biggest rewards come to those who stay the course.`,
+    High:
+      `You have the temperament for aggressive growth and a horizon long enough to ride out volatility. Your basket is built with ${allocation.equity}% equity — spread across large-caps for stability, mid-caps for growth, and a tactical dynamic allocation fund that automatically adjusts when markets get overheated. The ${allocation.debt}% debt allocation gives you rebalancing ammunition. This is a wealth-creation portfolio for someone who won't panic-sell at the first red day.`,
+    'Moderately High':
+      `You're looking for meaningful growth but with a safety net — and that's a smart approach. Your basket blends ${allocation.equity}% equity with ${allocation.debt}% debt and ${allocation.hybrid}% hybrid allocation. The dynamic balanced fund at the core automatically shifts between equity and debt based on market valuations, so you get built-in risk management. This portfolio is designed for someone building wealth over 5+ years who wants growth without the full rollercoaster ride.`,
+    Moderate:
+      `You value balance — growth matters, but so does sleeping well at night. We've designed your basket with a ${allocation.equity}% equity, ${allocation.debt}% debt, and ${allocation.hybrid}% hybrid split. The dynamic allocation fund at the center acts as your portfolio's autopilot, dialing equity up or down based on where markets stand. Debt funds provide the steady foundation. This is a thoughtful portfolio for a 3-5 year horizon that grows your money without dramatic swings.`,
+    'Low to Moderate':
+      `You prefer the safety of your capital with a gentle nudge towards growth — and there's nothing wrong with that. Your basket is mostly debt (${allocation.debt}%) and hybrid (${allocation.hybrid}%), with just ${allocation.equity}% in conservative equity exposure. The debt-heavy hybrid and equity savings funds give you a taste of market participation with significantly cushioned downside. Think of this as the next step beyond fixed deposits — better returns with controlled risk.`,
+    Low:
+      `Capital safety is your priority, and this basket respects that completely. With ${allocation.debt}% in high-quality debt instruments and ${allocation.hybrid}% in low-risk hybrids, your money is in the safest corner of the mutual fund universe. Liquid and low-duration funds give you quick access when you need it. The arbitrage fund adds tax efficiency without market risk. This is your financial foundation — stable, accessible, and earning more than a savings account.`,
+  };
+
   const wisdomNotes: Record<SEBIRiskLevel, string> = {
     'Very High':
       '"The stock market is a device for transferring money from the impatient to the patient." — Warren Buffett. Your aggressive allocation will reward patience. Stay invested through market cycles, add via SIP, and let compounding do its magic over 10+ years.',
@@ -549,6 +565,7 @@ export function recommendFundBasket(riskLevel: SEBIRiskLevel): FundBasket {
     recommendations: recommendations.filter((r) => r.fund != null),
     totalFunds: recommendations.filter((r) => r.fund != null).length,
     wisdomNote: wisdomNotes[riskLevel],
+    profileSummary: profileSummaries[riskLevel],
   };
 }
 

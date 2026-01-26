@@ -46,3 +46,29 @@ input[type='range']::-moz-range-thumb {
   border: 3px solid white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
+
+/* Print styles for PDF export */
+@media print {
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  header,
+  footer,
+  nav,
+  [data-disclaimer-banner] {
+    display: none !important;
+  }
+
+  main {
+    min-height: auto !important;
+  }
+
+  /* Avoid breaking inside cards */
+  .rounded-xl,
+  .rounded-2xl {
+    break-inside: avoid;
+  }
+}

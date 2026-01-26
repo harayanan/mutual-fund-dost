@@ -46,6 +46,13 @@ export default function Home() {
                 Find Your Funds
               </Link>
               <Link
+                href="/funds"
+                className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white font-medium px-8 py-4 rounded-xl hover:bg-white/20 transition-colors text-lg"
+              >
+                <BarChart3 className="w-5 h-5" />
+                Fund Screener
+              </Link>
+              <Link
                 href="/news"
                 className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white font-medium px-8 py-4 rounded-xl hover:bg-white/20 transition-colors text-lg"
               >

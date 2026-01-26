@@ -3,7 +3,7 @@
 import { type FundBasket as FundBasketType } from '@/lib/advisor-engine';
 import FundCard from '@/components/ui/FundCard';
 import FundAllocation from './FundAllocation';
-import { Sparkles, Quote } from 'lucide-react';
+import { Sparkles, Quote, User } from 'lucide-react';
 
 interface FundBasketProps {
   basket: FundBasketType;
@@ -47,13 +47,16 @@ export default function FundBasket({ basket }: FundBasketProps) {
         </div>
       </div>
 
-      {/* Investor Profile */}
-      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-indigo-800 mb-2">
-          Your Investor Profile
-        </h3>
+      {/* Profile Summary */}
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 sm:p-6">
+        <div className="flex items-center gap-2 mb-3">
+          <User className="w-4 h-4 text-indigo-600" />
+          <h3 className="text-sm font-semibold text-indigo-800">
+            Here&apos;s What We Built For You
+          </h3>
+        </div>
         <p className="text-sm text-indigo-700 leading-relaxed">
-          {basket.assetAllocation.investorProfile}
+          {basket.profileSummary}
         </p>
       </div>
 

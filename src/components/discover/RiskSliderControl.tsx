@@ -46,7 +46,8 @@ export default function RiskSliderControl({ value, onChange }: RiskSliderControl
                   d={`M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`}
                   fill={RISK_LEVEL_COLORS[level]}
                   opacity={i === currentIndex ? 1 : 0.3}
-                  className="transition-opacity duration-300"
+                  className="transition-opacity duration-300 cursor-pointer"
+                  onClick={() => onChange(level)}
                 />
               );
             })}

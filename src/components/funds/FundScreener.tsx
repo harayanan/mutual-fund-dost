@@ -95,7 +95,7 @@ function formatReturn(val: number | null): React.ReactNode {
 
 export default function FundScreener() {
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<Set<string>>(new Set());
   const [riskLevel, setRiskLevel] = useState('');
   const [sortField, setSortField] = useState<SortField>('aumCrores');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
@@ -129,8 +129,8 @@ export default function FundScreener() {
       );
     }
 
-    if (category) {
-      funds = funds.filter((f) => f.category === category);
+    if (selectedCategories.size > 0) {
+      funds = funds.filter((f) => selectedCategories.has(f.category));
     }
 
     if (riskLevel) {
@@ -165,7 +165,7 @@ export default function FundScreener() {
     });
 
     return funds;
-  }, [search, category, riskLevel, sortField, sortDir]);
+  }, [search, selectedCategories, riskLevel, sortField, sortDir]);
 
   const toggleSort = (field: SortField) => {
     if (sortField === field) {
@@ -197,7 +197,19 @@ export default function FundScreener() {
     );
   };
 
-  const activeFilters = [category, riskLevel].filter(Boolean).length;
+  const toggleCategory = (cat: string) => {
+    setSelectedCategories((prev) => {
+      const next = new Set(prev);
+      if (next.has(cat)) {
+        next.delete(cat);
+      } else {
+        next.add(cat);
+      }
+      return next;
+    });
+  };
+
+  const activeFilters = (selectedCategories.size > 0 ? 1 : 0) + (riskLevel ? 1 : 0);
 
   return (
     <div>
@@ -252,40 +264,50 @@ export default function FundScreener() {
           )}
         </div>
 
-        {/* Filter Dropdowns */}
+        {/* Filter Panel */}
         {showFilters && (
-          <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-gray-100">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
-            <select
-              value={riskLevel}
-              onChange={(e) => setRiskLevel(e.target.value)}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {RISK_LEVELS.map((r) => (
-                <option key={r.value} value={r.value}>
-                  {r.label}
-                </option>
-              ))}
-            </select>
+          <div className="pt-3 border-t border-gray-100 space-y-3">
+            <div>
+              <div className="text-xs font-medium text-gray-500 mb-2">Category</div>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.filter((c) => c.value).map((c) => (
+                  <button
+                    key={c.value}
+                    onClick={() => toggleCategory(c.value)}
+                    className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors ${
+                      selectedCategories.has(c.value)
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs font-medium text-gray-500 mb-2">Risk Level</div>
+              <select
+                value={riskLevel}
+                onChange={(e) => setRiskLevel(e.target.value)}
+                className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {RISK_LEVELS.map((r) => (
+                  <option key={r.value} value={r.value}>
+                    {r.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             {activeFilters > 0 && (
               <button
                 onClick={() => {
-                  setCategory('');
+                  setSelectedCategories(new Set());
                   setRiskLevel('');
                 }}
                 className="text-sm text-red-500 hover:text-red-700 font-medium"
               >
-                Clear all
+                Clear all filters
               </button>
             )}
           </div>
@@ -297,6 +319,9 @@ export default function FundScreener() {
             <span>
               Showing <strong className="text-gray-900">{filtered.length}</strong>{' '}
               of {HDFC_FUNDS.length} funds
+            </span>
+            <span className="bg-blue-50 text-blue-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+              Direct Plans
             </span>
             {lastUpdated && (
               <span className="flex items-center gap-1 text-emerald-600">
@@ -363,7 +388,7 @@ export default function FundScreener() {
                   <GitCompareArrows className="w-4 h-4 text-gray-400 mx-auto" />
                 </th>
                 <ThSort field="name" label="Fund Name" sortField={sortField} sortDir={sortDir} onSort={toggleSort} />
-                <ThSort field="category" label="Category" sortField={sortField} sortDir={sortDir} onSort={toggleSort} />
+                <ThSort field="category" label="Sub-category" sortField={sortField} sortDir={sortDir} onSort={toggleSort} />
                 <ThSort field="riskLevel" label="Risk" sortField={sortField} sortDir={sortDir} onSort={toggleSort} />
                 <ThSort field="aumCrores" label="AUM (Cr)" sortField={sortField} sortDir={sortDir} onSort={toggleSort} align="right" />
                 <ThSort field="expenseRatio" label="TER %" sortField={sortField} sortDir={sortDir} onSort={toggleSort} align="right" />
@@ -578,8 +603,8 @@ export default function FundScreener() {
 
       {/* Bottom Disclaimer */}
       <div className="mt-6 text-[10px] text-gray-400 text-center">
-        All return data is CAGR as of {HDFC_FUNDS[0]?.asOfDate}. Past performance is not indicative of future results.
-        Mutual fund investments are subject to market risks.
+        All data shown is for <strong>Direct Growth</strong> plans. Return data is CAGR as of {HDFC_FUNDS[0]?.asOfDate}.
+        Past performance is not indicative of future results. Mutual fund investments are subject to market risks.
       </div>
     </div>
   );

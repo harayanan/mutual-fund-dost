@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase } from '@/lib/supabase';
 import { refreshAllFunds } from '@/lib/fund-data-fetcher';
+import { scrapeFundManagers } from '@/lib/fund-manager-scraper';
+import { HDFC_FUNDS } from '@/data/hdfc-funds';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 300; // 5 minutes for Vercel
@@ -23,16 +25,34 @@ export async function GET(request: NextRequest) {
   const startTime = Date.now();
 
   try {
-    // Refresh fund data from AMFI + mfapi.in
+    // Step 1: Refresh fund data from AMFI + mfapi.in
     const { updatedFunds, errors, navDate } = await refreshAllFunds();
+
+    // Step 2: Scrape fund managers from hdfcfund.com
+    let scrapedManagers = new Map<string, string>();
+    let managerScrapeErrors: string[] = [];
+    let managersScraped = 0;
+    try {
+      const scrapeResult = await scrapeFundManagers(HDFC_FUNDS);
+      scrapedManagers = scrapeResult.managers;
+      managerScrapeErrors = scrapeResult.errors;
+      managersScraped = scrapeResult.scraped;
+    } catch (err) {
+      managerScrapeErrors.push(
+        `Manager scrape failed: ${err instanceof Error ? err.message : String(err)}`
+      );
+    }
 
     const supabase = getSupabase();
 
-    // Upsert funds into Supabase
+    // Step 3: Upsert funds into Supabase
     let upsertedCount = 0;
     let performanceCount = 0;
 
     for (const fund of updatedFunds) {
+      // Use scraped manager if available, else fall back to static data
+      const fundManager = scrapedManagers.get(fund.id) || fund.fundManager;
+
       // Upsert fund record
       const { error: fundError } = await supabase.from('funds').upsert(
         {
@@ -47,7 +67,7 @@ export async function GET(request: NextRequest) {
           expense_ratio: fund.expenseRatio,
           min_investment: fund.minInvestment,
           inception_date: fund.inceptionDate,
-          fund_manager: fund.fundManager,
+          fund_manager: fundManager,
           investment_objective: fund.investmentObjective,
           suitable_for: fund.suitableFor,
           min_horizon_months: fund.minHorizonMonths,
@@ -102,7 +122,9 @@ export async function GET(request: NextRequest) {
         details: {
           fundsUpdated: upsertedCount,
           performanceRecords: performanceCount,
+          managersScraped,
           errors: errors.slice(0, 10),
+          managerScrapeErrors: managerScrapeErrors.slice(0, 10),
           navDate,
           durationMs: duration,
         },
@@ -114,6 +136,8 @@ export async function GET(request: NextRequest) {
       success: true,
       fundsUpdated: upsertedCount,
       performanceRecords: performanceCount,
+      managersScraped,
+      managerScrapeErrors: managerScrapeErrors.slice(0, 10),
       errors: errors.slice(0, 10),
       navDate,
       durationMs: duration,
