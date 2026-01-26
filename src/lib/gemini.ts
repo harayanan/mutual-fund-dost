@@ -9,14 +9,17 @@ export async function analyzeNewsForInvestors(newsItems: { title: string; summar
     .map((n, i) => `${i + 1}. [${n.source}] ${n.title}\n   ${n.summary}`)
     .join('\n\n');
 
-  const prompt = `You are "Mutual Fund Dost", an expert Indian mutual fund advisor focused exclusively on HDFC Mutual Fund schemes. Analyze the following news items and provide investment insights.
+  const prompt = `You are "Mutual Fund Dost", an expert Indian mutual fund advisor focused exclusively on HDFC Mutual Fund schemes. Analyze the following news items and provide deep, valuable investment insights.
 
 For each news item:
 1. Classify the news: macro / geopolitical / company / sector / regulatory / market
-2. Assess the impact on Indian mutual fund investors: positive / negative / neutral
-3. Identify which HDFC Mutual Fund schemes are most likely affected (use exact fund names)
-4. Provide a clear, actionable insight in plain English (2-3 sentences)
-5. Rate the significance: high / medium / low
+2. Rate relevance to HDFC mutual fund investors on a scale of 1-10 (10 = directly impacts HDFC fund NAVs, 1 = completely unrelated)
+3. If relevance_score < 4, set "skip": true (generic market noise not worth showing to investors)
+4. Assess the impact on Indian mutual fund investors: positive / negative / neutral
+5. Identify which HDFC Mutual Fund schemes are most likely affected (use exact fund names)
+6. Provide a RICH, DETAILED insight paragraph (4-5 sentences). Cover: what exactly happened, why it matters for mutual fund investors, how it connects to specific funds in the HDFC universe, and what investors should watch for next.
+7. Provide a SPECIFIC investor_action — not generic advice like "stay invested" but concrete next steps. Example: "SIP investors in HDFC Infrastructure Fund may see short-term NAV pressure; continue SIPs to average down. New lump-sum investors should wait for clarity on Q3 earnings before adding exposure."
+8. Rate the significance: high / medium / low
 
 HDFC Fund Universe:
 - Equity: Flexi Cap, Mid Cap, Small Cap, Large Cap, Large and Mid Cap, Focused, Multi Cap, Capital Builder Value, Dividend Yield, ELSS Tax Saver
@@ -32,19 +35,22 @@ Important guidelines:
 - Focus on long-term wealth creation perspective
 - Consider the investor's risk profile when suggesting impact
 - Be balanced and factual, avoid sensationalism
+- Skip articles that are generic market commentary, clickbait, or have no actionable relevance to HDFC fund investors
 
 NEWS ITEMS:
 ${newsText}
 
-Respond in valid JSON array format:
+Respond in valid JSON array format. Include ALL items (even skipped ones):
 [{
   "news_index": 1,
   "category": "macro",
+  "relevance_score": 8,
+  "skip": false,
   "impact": "positive",
   "significance": "high",
   "affected_funds": ["HDFC Flexi Cap Fund", "HDFC Large Cap Fund"],
-  "insight": "Your insight here...",
-  "investor_action": "What investors should consider..."
+  "insight": "Your detailed 4-5 sentence insight here...",
+  "investor_action": "Specific, concrete next steps for investors..."
 }]`;
 
   const result = await geminiModel.generateContent(prompt);

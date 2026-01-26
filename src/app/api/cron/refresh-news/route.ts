@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
   const errors: string[] = [];
 
   try {
-    // Fetch fresh news
-    const newsItems = await fetchLatestNews(12);
+    // Fetch fresh news (more items to give Gemini more to rank and filter)
+    const newsItems = await fetchLatestNews(20);
 
     if (newsItems.length === 0) {
       return NextResponse.json({
@@ -37,6 +37,8 @@ export async function GET(request: NextRequest) {
     let analyses: Array<{
       news_index: number;
       category: string;
+      relevance_score: number;
+      skip: boolean;
       impact: string;
       significance: string;
       affected_funds: string[];
@@ -56,8 +58,8 @@ export async function GET(request: NextRequest) {
       errors.push(`Gemini analysis failed: ${aiError instanceof Error ? aiError.message : String(aiError)}`);
     }
 
-    // Combine news with analysis
-    const enrichedNews = newsItems.map((news, index) => {
+    // Combine news with analysis, then filter out skipped/empty items
+    const allNews = newsItems.map((news, index) => {
       const analysis = analyses.find((a) => a.news_index === index + 1);
       return {
         title: news.title,
@@ -71,8 +73,15 @@ export async function GET(request: NextRequest) {
         significance: analysis?.significance || 'medium',
         impacted_funds: analysis?.affected_funds || [],
         investor_action: analysis?.investor_action || null,
+        relevance_score: analysis?.relevance_score || 0,
+        skip: analysis?.skip || false,
       };
     });
+
+    // Only keep quality items: not skipped, has AI analysis
+    const enrichedNews = allNews.filter(
+      (item) => !item.skip && item.ai_analysis !== null
+    ).map(({ skip, relevance_score, ...rest }) => rest);
 
     // Insert into Supabase
     const supabase = getSupabase();
@@ -90,8 +99,10 @@ export async function GET(request: NextRequest) {
         last_updated: new Date().toISOString(),
         status: errors.length === 0 ? 'success' : 'partial',
         details: {
-          newsCount: enrichedNews.length,
+          fetchedCount: newsItems.length,
           analyzedCount: analyses.length,
+          qualityCount: enrichedNews.length,
+          skippedCount: newsItems.length - enrichedNews.length,
           errors: errors.slice(0, 5),
           durationMs: duration,
         },
@@ -101,8 +112,10 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      newsCount: enrichedNews.length,
+      fetchedCount: newsItems.length,
+      qualityCount: enrichedNews.length,
       analyzedCount: analyses.length,
+      skippedCount: newsItems.length - enrichedNews.length,
       errors: errors.slice(0, 5),
       durationMs: duration,
     });

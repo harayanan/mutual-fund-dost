@@ -124,26 +124,29 @@ export default function NewsCard({ news }: NewsCardProps) {
         <span>Impact: {impact.label}</span>
       </div>
 
-      {/* AI Analysis */}
+      {/* AI Analysis - Primary insight section */}
       {news.ai_analysis && (
-        <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-3">
-          <div className="flex items-center gap-1.5 mb-2">
-            <Lightbulb className="w-4 h-4 text-blue-600" />
-            <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">
-              Dost&apos;s Insight
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-5 mb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Lightbulb className="w-5 h-5 text-blue-600" />
+            <span className="text-xs font-bold text-blue-800 uppercase tracking-wide">
+              Why This Matters
             </span>
           </div>
-          <p className="text-sm text-gray-700 leading-relaxed">
+          <p className="text-sm text-gray-800 leading-relaxed">
             {news.ai_analysis}
           </p>
         </div>
       )}
 
-      {/* Investor Action */}
+      {/* Investor Action - Distinct callout */}
       {news.investor_action && (
-        <p className="text-sm text-gray-600 italic mb-3">
-          {news.investor_action}
-        </p>
+        <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4 flex gap-3">
+          <span className="text-amber-600 font-bold text-sm mt-0.5 shrink-0">Action:</span>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            {news.investor_action}
+          </p>
+        </div>
       )}
 
       {/* Affected Funds */}
