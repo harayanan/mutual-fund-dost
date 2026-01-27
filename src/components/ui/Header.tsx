@@ -21,7 +21,7 @@ export default function Header() {
                 Mutual Fund Dost
               </h1>
               <p className="text-[10px] text-gray-500 -mt-0.5">
-                Your HDFC MF Guide
+                Your XYZ MF Guide
               </p>
             </div>
           </Link>

@@ -153,7 +153,7 @@ export default function NewsCard({ news }: NewsCardProps) {
       {news.impacted_funds && news.impacted_funds.length > 0 && (
         <div className="pt-3 border-t border-gray-100">
           <p className="text-[10px] text-gray-400 uppercase tracking-wide mb-2">
-            Affected HDFC Funds
+            Affected XYZ Funds
           </p>
           <div className="flex flex-wrap gap-1.5">
             {news.impacted_funds.map((fund) => (

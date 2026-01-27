@@ -19,7 +19,7 @@ export default function Home() {
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               <span className="text-sm text-blue-100">
-                Powered by AI, focused on HDFC Mutual Funds
+                Powered by AI, focused on XYZ Mutual Funds
               </span>
             </div>
 
@@ -32,7 +32,7 @@ export default function Home() {
             </h1>
 
             <p className="text-lg sm:text-xl text-blue-100 leading-relaxed mb-8 max-w-2xl mx-auto">
-              Navigate HDFC Mutual Funds with confidence. Get AI-powered news
+              Navigate XYZ Mutual Funds with confidence. Get AI-powered news
               insights, personalized risk profiling, and expert fund
               recommendations built on principles of long-term wealth creation.
             </p>
@@ -89,13 +89,13 @@ export default function Home() {
                 <p className="text-gray-600 leading-relaxed mb-6">
                   Stay ahead of the market. Our AI reads the latest financial
                   news — macroeconomic shifts, geopolitical events, sector
-                  movements — and tells you exactly what it means for your HDFC
+                  movements — and tells you exactly what it means for your XYZ
                   mutual fund investments.
                 </p>
                 <ul className="space-y-2">
                   {[
                     'Real-time news from top Indian financial sources',
-                    'AI-powered impact analysis on HDFC funds',
+                    'AI-powered impact analysis on XYZ funds',
                     'Actionable insights, not noise',
                   ].map((item) => (
                     <li
@@ -122,7 +122,7 @@ export default function Home() {
                 <p className="text-gray-600 leading-relaxed mb-6">
                   Find the perfect fund basket for you. Take a quick risk
                   assessment aligned with SEBI guidelines, and get personalized
-                  HDFC fund recommendations built on proven investment
+                  XYZ fund recommendations built on proven investment
                   principles.
                 </p>
                 <ul className="space-y-2">
@@ -153,7 +153,7 @@ export default function Home() {
                   Fund Screener
                 </h3>
                 <p className="text-gray-600 leading-relaxed mb-6">
-                  Deep-dive into all 60 HDFC fund schemes. Sort by returns,
+                  Deep-dive into all 60 XYZ fund schemes. Sort by returns,
                   AUM, expense ratio, and risk level. Compare up to 4 funds
                   side-by-side with automatic best-in-class highlighting.
                 </p>
@@ -254,7 +254,7 @@ export default function Home() {
             Start Your Wealth Creation Journey
           </h2>
           <p className="text-gray-500 mb-8 max-w-lg mx-auto">
-            Take the 2-minute risk assessment and discover the HDFC fund basket
+            Take the 2-minute risk assessment and discover the XYZ fund basket
             that&apos;s right for you.
           </p>
           <Link
@@ -277,7 +277,7 @@ export default function Home() {
             <div>
               <div className="text-3xl font-bold text-blue-400">60</div>
               <div className="text-sm text-gray-400 mt-1">
-                HDFC Funds Covered
+                XYZ Funds Covered
               </div>
             </div>
             <div>

@@ -17,7 +17,7 @@ export default function FundsPage() {
               Fund Screener
             </h1>
             <p className="text-sm text-gray-500">
-              All 60 HDFC mutual fund schemes with detailed performance data
+              All 60 XYZ mutual fund schemes with detailed performance data
             </p>
           </div>
         </div>
@@ -30,7 +30,7 @@ export default function FundsPage() {
                 How to Use the Screener
               </p>
               <p className="text-xs text-emerald-600 leading-relaxed">
-                Search, filter, and sort all HDFC funds by returns, AUM, expense
+                Search, filter, and sort all XYZ funds by returns, AUM, expense
                 ratio, risk level, and more. Select up to 4 funds to compare
                 them side-by-side with automatic best-in-class highlighting. Click
                 any column header to sort, or use the quick-sort chips. Data is

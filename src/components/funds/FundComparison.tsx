@@ -143,7 +143,7 @@ export default function FundComparison({ funds, onClose, onRemove }: FundCompari
               Fund Comparison
             </h2>
             <p className="text-xs text-indigo-200">
-              Comparing {funds.length} HDFC funds side-by-side
+              Comparing {funds.length} XYZ funds side-by-side
             </p>
           </div>
           <button

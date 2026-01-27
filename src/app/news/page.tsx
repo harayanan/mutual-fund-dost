@@ -17,7 +17,7 @@ export default function NewsPage() {
               News Insights
             </h1>
             <p className="text-sm text-gray-500">
-              What today&apos;s news means for your HDFC mutual fund investments
+              What today&apos;s news means for your XYZ mutual fund investments
             </p>
           </div>
         </div>
@@ -33,7 +33,7 @@ export default function NewsPage() {
               <p className="text-xs text-blue-600 leading-relaxed">
                 We aggregate news from India&apos;s top financial sources
                 (Economic Times, Moneycontrol, Livemint), then use AI to analyze
-                each story&apos;s impact on HDFC Mutual Fund schemes. Each
+                each story&apos;s impact on XYZ Mutual Fund schemes. Each
                 insight tells you which funds may be affected and what you should
                 consider as a long-term investor. News is refreshed every 4
                 hours.

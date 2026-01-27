@@ -16,7 +16,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Your trusted guide for HDFC Mutual Fund investments. We help
+              Your trusted guide for XYZ Mutual Fund investments. We help
               Indian investors make informed decisions for long-term wealth
               creation.
             </p>
@@ -49,7 +49,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
-                  HDFC Mutual Fund Official
+                  XYZ Mutual Fund Official
                 </a>
               </li>
               <li>
@@ -82,7 +82,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-xs text-gray-500">
             &copy; {new Date().getFullYear()} Mutual Fund Dost. Not affiliated
-            with HDFC Asset Management Company Ltd. All fund data is sourced
+            with XYZ Asset Management Company Ltd. All fund data is sourced
             from publicly available information.
           </p>
         </div>

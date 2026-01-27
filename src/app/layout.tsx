@@ -16,12 +16,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Mutual Fund Dost - Your HDFC Mutual Fund Guide',
+  title: 'Mutual Fund Dost - Your XYZ Mutual Fund Guide',
   description:
-    'Your trusted guide for HDFC Mutual Fund investments. Get AI-powered news insights, personalized fund recommendations based on your risk profile, and expert advice for long-term wealth creation.',
+    'Your trusted guide for XYZ Mutual Fund investments. Get AI-powered news insights, personalized fund recommendations based on your risk profile, and expert advice for long-term wealth creation.',
   keywords: [
     'mutual fund',
-    'HDFC',
+    'XYZ',
     'investment',
     'India',
     'SIP',

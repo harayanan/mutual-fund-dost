@@ -56,7 +56,7 @@ function LoadingSkeleton() {
               Discover Your Funds
             </h1>
             <p className="text-sm text-gray-500">
-              Find the HDFC fund basket matched to your risk profile
+              Find the XYZ fund basket matched to your risk profile
             </p>
           </div>
         </div>
@@ -137,7 +137,7 @@ function DiscoverContent() {
       if (navigator.share) {
         await navigator.share({
           title: `Mutual Fund Dost — ${riskLevel} Risk Profile`,
-          text: `Check out my personalized HDFC fund basket for a ${riskLevel} risk profile!`,
+          text: `Check out my personalized XYZ fund basket for a ${riskLevel} risk profile!`,
           url,
         });
       } else {
@@ -172,7 +172,7 @@ function DiscoverContent() {
               Discover Your Funds
             </h1>
             <p className="text-sm text-gray-500">
-              Find the HDFC fund basket matched to your risk profile
+              Find the XYZ fund basket matched to your risk profile
             </p>
           </div>
         </div>
