@@ -68,7 +68,7 @@ export default function NewsFeed() {
   const handleRefresh = async () => {
     setRefreshing(true);
     try {
-      await fetch('/api/news', { method: 'POST' });
+      await fetch('/api/news/refresh', { method: 'POST' });
     } catch {
       // Still try to re-fetch cached data even if refresh fails
     }
