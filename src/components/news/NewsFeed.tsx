@@ -63,8 +63,17 @@ export default function NewsFeed() {
     setPage(1);
   };
 
-  const handleRefresh = () => {
-    fetchNews(page, filter);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetch('/api/news', { method: 'POST' });
+    } catch {
+      // Still try to re-fetch cached data even if refresh fails
+    }
+    await fetchNews(page, filter);
+    setRefreshing(false);
   };
 
   const startItem = (page - 1) * PAGE_LIMIT + 1;
@@ -148,10 +157,11 @@ export default function NewsFeed() {
           )}
           <button
             onClick={handleRefresh}
-            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium"
+            disabled={refreshing}
+            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
-            Refresh
+            <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+            {refreshing ? 'Refreshing...' : 'Refresh'}
           </button>
         </div>
       </div>
