@@ -8,28 +8,28 @@ import FundBasket from '@/components/discover/FundBasket';
 import {
   SEBI_RISK_LEVELS,
   type SEBIRiskLevel,
-  type FundBasket as FundBasketType,
   recommendFundBasket,
 } from '@/lib/advisor-engine';
+import { buildRecommendation, type RecommendationResult } from '@/lib/recommendation';
 import { Search, RotateCcw, Share2, FileDown, Check } from 'lucide-react';
 
 const STORAGE_KEY = 'mfd_risk_profile';
 
 type Stage = 'loading' | 'profiler' | 'results';
 
-function loadSavedProfile(): { riskLevel: SEBIRiskLevel } | null {
+function loadSavedProfile(): { riskLevel: SEBIRiskLevel; answers?: Record<string, number> } | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
     const data = JSON.parse(raw);
-    if (data?.riskLevel) return { riskLevel: data.riskLevel };
+    if (data?.riskLevel) return { riskLevel: data.riskLevel, answers: data.answers };
   } catch {}
   return null;
 }
 
-function saveProfile(riskLevel: SEBIRiskLevel) {
+function saveProfile(riskLevel: SEBIRiskLevel, answers?: Record<string, number>) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ riskLevel }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ riskLevel, answers }));
   } catch {}
 }
 
@@ -80,15 +80,19 @@ function DiscoverContent() {
   const searchParams = useSearchParams();
   const [stage, setStage] = useState<Stage>('loading');
   const [riskLevel, setRiskLevel] = useState<SEBIRiskLevel>('Very High');
-  const [basket, setBasket] = useState<FundBasketType | null>(null);
+  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [basket, setBasket] = useState<RecommendationResult | null>(null);
   const [copied, setCopied] = useState(false);
 
-  const generateBasket = useCallback((level: SEBIRiskLevel) => {
+  const generateBasket = useCallback((level: SEBIRiskLevel, ans?: Record<string, number>) => {
     setRiskLevel(level);
-    const result = recommendFundBasket(level);
+    if (ans) setAnswers(ans);
+    const result = ans && Object.keys(ans).length > 0
+      ? buildRecommendation(ans, level)
+      : buildRecommendation({}, level);
     setBasket(result);
     setStage('results');
-    saveProfile(level);
+    saveProfile(level, ans);
   }, []);
 
   // On mount, check URL params first, then localStorage
@@ -101,15 +105,15 @@ function DiscoverContent() {
 
     const saved = loadSavedProfile();
     if (saved) {
-      generateBasket(saved.riskLevel);
+      generateBasket(saved.riskLevel, saved.answers);
     } else {
       setStage('profiler');
     }
   }, [generateBasket, searchParams]);
 
   const handleProfilerComplete = useCallback(
-    (level: SEBIRiskLevel) => {
-      generateBasket(level);
+    (level: SEBIRiskLevel, ans: Record<string, number>) => {
+      generateBasket(level, ans);
     },
     [generateBasket]
   );
@@ -120,9 +124,9 @@ function DiscoverContent() {
 
   const handleSliderChange = useCallback(
     (level: SEBIRiskLevel) => {
-      generateBasket(level);
+      generateBasket(level, answers);
     },
-    [generateBasket]
+    [generateBasket, answers]
   );
 
   const handleStartOver = useCallback(() => {
@@ -132,7 +136,10 @@ function DiscoverContent() {
   }, []);
 
   const handleShare = useCallback(async () => {
-    const url = `${window.location.origin}/discover?risk=${encodeURIComponent(riskLevel)}`;
+    const params = new URLSearchParams({ risk: riskLevel });
+    if (basket?.personalization.goalLabel) params.set('goal', basket.personalization.goalLabel);
+    if (basket?.personalization.horizonLabel) params.set('horizon', basket.personalization.horizonLabel);
+    const url = `${window.location.origin}/discover?${params.toString()}`;
     try {
       if (navigator.share) {
         await navigator.share({
@@ -153,7 +160,7 @@ function DiscoverContent() {
         setTimeout(() => setCopied(false), 2000);
       } catch {}
     }
-  }, [riskLevel]);
+  }, [riskLevel, basket]);
 
   const handleExportPDF = useCallback(() => {
     window.print();

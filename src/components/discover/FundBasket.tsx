@@ -1,17 +1,43 @@
 'use client';
 
-import { type FundBasket as FundBasketType } from '@/lib/advisor-engine';
+import { type FundBasket as LegacyBasketType } from '@/lib/advisor-engine';
+import { type RecommendationResult } from '@/lib/recommendation';
 import FundCard from '@/components/ui/FundCard';
 import FundAllocation from './FundAllocation';
-import { Sparkles, Quote, User } from 'lucide-react';
+import { Sparkles, Quote, User, Tag } from 'lucide-react';
 
 interface FundBasketProps {
-  basket: FundBasketType;
+  basket: RecommendationResult | LegacyBasketType;
 }
 
 export default function FundBasket({ basket }: FundBasketProps) {
+  const personalization = 'personalization' in basket ? basket.personalization : null;
+  const tags = personalization?.tags ?? [];
+
   return (
     <div className="space-y-6">
+      {/* Personalization Badges */}
+      {tags.length > 0 && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Tag className="w-4 h-4 text-emerald-600" />
+            <span className="text-sm font-semibold text-emerald-800">
+              Personalized for you
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Summary Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 sm:p-8 text-white">
         <div className="flex items-center gap-2 mb-3">

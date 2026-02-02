@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   SEBIRiskLevel,
   SEBI_RISK_LEVELS,
-  recommendFundBasket,
   scoreToRiskLevel,
 } from '@/lib/advisor-engine';
+import { buildRecommendation } from '@/lib/recommendation';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,18 +14,18 @@ export async function POST(request: NextRequest) {
       answers?: Record<string, number>;
     };
 
-    let resolvedRiskLevel: SEBIRiskLevel;
+    let resolvedRiskLevel: SEBIRiskLevel | undefined;
 
     if (riskLevel && SEBI_RISK_LEVELS.includes(riskLevel)) {
       resolvedRiskLevel = riskLevel;
-    } else if (answers) {
+    } else if (answers && Object.keys(answers).length > 0) {
       const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0);
       resolvedRiskLevel = scoreToRiskLevel(totalScore);
     } else {
-      resolvedRiskLevel = 'Very High'; // default
+      resolvedRiskLevel = 'Very High';
     }
 
-    const basket = recommendFundBasket(resolvedRiskLevel);
+    const basket = buildRecommendation(answers ?? {}, resolvedRiskLevel);
 
     return NextResponse.json(basket);
   } catch (error) {

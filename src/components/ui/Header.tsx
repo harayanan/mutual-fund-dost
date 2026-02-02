@@ -22,6 +22,9 @@ export default function Header() {
               </h1>
               <p className="text-[10px] text-gray-500 -mt-0.5">
                 Your XYZ MF Guide
+                <span className="ml-1 text-gray-400" title={`Built ${process.env.NEXT_PUBLIC_BUILD_TIME ?? ''}`}>
+                  v{process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0'}
+                </span>
               </p>
             </div>
           </Link>
