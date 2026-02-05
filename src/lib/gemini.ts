@@ -65,6 +65,129 @@ Respond in valid JSON array format. Include ALL items (even skipped ones):
   return JSON.parse(jsonMatch[0]);
 }
 
+// Types for Daily Brief
+export interface DistributorNewsInsight {
+  title: string;
+  source: string;
+  category: string;
+  clientImplication: string;
+  talkingPoints: string[];
+  affectedClientSegments: string[];
+  urgency: 'high' | 'medium' | 'low';
+}
+
+export interface ConversationStarter {
+  topic: string;
+  opener: string;
+  keyPoint: string;
+  clientBenefit: string;
+}
+
+export interface ActionItem {
+  task: string;
+  priority: 'high' | 'medium' | 'low';
+  clientSegment?: string;
+  deadline?: string;
+}
+
+export interface DailyBrief {
+  date: string;
+  generatedAt: string;
+  topStories: DistributorNewsInsight[];
+  conversationStarters: ConversationStarter[];
+  actionItems: ActionItem[];
+  dailyWisdom: string;
+}
+
+export async function generateDistributorBrief(
+  newsItems: { title: string; summary: string; source: string }[]
+): Promise<DailyBrief> {
+  const today = new Date().toISOString().split('T')[0];
+  const newsText = newsItems
+    .map((n, i) => `${i + 1}. [${n.source}] ${n.title}\n   ${n.summary}`)
+    .join('\n\n');
+
+  const prompt = `You are "Mutual Fund Dost", an AI assistant for mutual fund DISTRIBUTORS (not retail investors). Your job is to help distributors prepare for their day by summarizing news in a way that helps them serve their clients better.
+
+Today's date: ${today}
+
+Analyze the following news and create a DISTRIBUTOR-FOCUSED daily brief. Remember:
+- Frame everything in terms of "how to help clients" NOT "what to do as an investor"
+- Focus on conversation opportunities with clients
+- Identify which client segments should be contacted
+- Provide actionable tasks for the distributor's day
+
+NEWS ITEMS:
+${newsText}
+
+Create a comprehensive daily brief with:
+
+1. TOP STORIES (3-5 most important): For each story, provide:
+   - title: The headline
+   - source: News source
+   - category: macro / geopolitical / company / sector / regulatory / market
+   - clientImplication: 2-3 sentences explaining what this means for clients (not what the distributor should invest in)
+   - talkingPoints: Array of 2-3 specific points to discuss with clients
+   - affectedClientSegments: Array of client types who should know about this (e.g., "retirees", "young professionals", "HNI clients", "SIP investors", "lump sum investors")
+   - urgency: high (contact clients today) / medium (mention in next meeting) / low (good to know)
+
+2. CONVERSATION STARTERS (3-4): Proactive topics to bring up with clients:
+   - topic: Brief topic title
+   - opener: A natural conversation opener (e.g., "Have you seen the news about...")
+   - keyPoint: The main insight to convey
+   - clientBenefit: Why this conversation helps the client
+
+3. ACTION ITEMS (3-5): Specific tasks for the distributor today:
+   - task: Clear, actionable task description
+   - priority: high / medium / low
+   - clientSegment: Which clients this task relates to (optional)
+   - deadline: When to complete (e.g., "today", "this week") (optional)
+
+4. DAILY WISDOM: One motivational or educational quote/tip for distributors (1-2 sentences)
+
+XYZ Fund Universe (for context):
+- Equity: Flexi Cap, Mid Cap, Small Cap, Large Cap, Large and Mid Cap, Focused, Multi Cap, Capital Builder Value, Dividend Yield, ELSS Tax Saver
+- Sectoral/Thematic: Infrastructure, Technology, Pharma & Healthcare, Banking & Financial Services, Defence, Housing Opportunities, Manufacturing, Business Cycle
+- Hybrid: Balanced Advantage, Hybrid Equity, Equity Savings, Hybrid Debt, Multi-Asset Allocation, Arbitrage
+- Debt: Liquid, Low Duration, Short Term Debt, Corporate Bond, Banking & PSU Debt, Floating Rate Debt
+- Index: Nifty 50 Index, BSE Sensex Index, NIFTY Next 50 Index
+
+IMPORTANT GUIDELINES:
+- Be practical and actionable
+- Focus on client relationship building
+- Never give specific investment advice (distributors will customize for each client)
+- Emphasize the distributor's role as a trusted advisor
+- Keep language professional but warm
+
+Respond in valid JSON format:
+{
+  "topStories": [...],
+  "conversationStarters": [...],
+  "actionItems": [...],
+  "dailyWisdom": "..."
+}`;
+
+  const result = await geminiModel.generateContent(prompt);
+  const text = result.response.text();
+
+  // Extract JSON from response (handle markdown code blocks)
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error('Failed to parse Gemini response as JSON');
+  }
+
+  const parsed = JSON.parse(jsonMatch[0]);
+
+  return {
+    date: today,
+    generatedAt: new Date().toISOString(),
+    topStories: parsed.topStories || [],
+    conversationStarters: parsed.conversationStarters || [],
+    actionItems: parsed.actionItems || [],
+    dailyWisdom: parsed.dailyWisdom || '',
+  };
+}
+
 export async function generateFundInsight(fundName: string, fundDetails: Record<string, unknown>) {
   const prompt = `You are "Mutual Fund Dost", a trusted mutual fund advisor. Provide a brief, insightful analysis of ${fundName}.
 

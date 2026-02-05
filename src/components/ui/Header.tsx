@@ -38,6 +38,12 @@ export default function Header() {
               News Insights
             </Link>
             <Link
+              href="/daily-brief"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Daily Brief
+            </Link>
+            <Link
               href="/discover"
               className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
             >
@@ -81,6 +87,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 News Insights
+              </Link>
+              <Link
+                href="/daily-brief"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Daily Brief
               </Link>
               <Link
                 href="/discover"
