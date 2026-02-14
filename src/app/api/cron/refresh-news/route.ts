@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
     // Only keep quality items: not skipped, has AI analysis
     const enrichedNews = allNews.filter(
       (item) => !item.skip && item.ai_analysis !== null
-    ).map(({ skip, relevance_score, ...rest }) => rest);
+    ).map(({ skip: _, relevance_score: __, ...rest }) => rest);
 
     // Insert into Supabase
     const supabase = getSupabase();

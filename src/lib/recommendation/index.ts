@@ -2,7 +2,6 @@ import {
   type SEBIRiskLevel,
   RISK_ALLOCATIONS,
   recommendFundBasket as legacyRecommend,
-  type FundBasket,
 } from '@/lib/advisor-engine';
 import { buildInvestorProfile } from './investor-profile';
 import { computeAllocation } from './allocation-strategy';

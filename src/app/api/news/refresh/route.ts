@@ -56,7 +56,7 @@ export async function POST() {
         };
       })
       .filter((item) => !item.skip && item.ai_analysis !== null)
-      .map(({ skip, relevance_score, ...rest }) => rest);
+      .map(({ skip: _, relevance_score: __, ...rest }) => rest);
 
     const supabase = getSupabase();
     const { error: insertError } = await supabase.from('mfd_news_cache').insert(enrichedNews);

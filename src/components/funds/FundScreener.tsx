@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { HDFC_FUNDS, Fund } from '@/data/hdfc-funds';
+import { HDFC_FUNDS } from '@/data/hdfc-funds';
 import {
   ArrowUpDown,
   ArrowUp,

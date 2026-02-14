@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useCallback, useEffect } from 'react';
+import { Suspense, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import RiskProfiler from '@/components/discover/RiskProfiler';
 import RiskSliderControl from '@/components/discover/RiskSliderControl';
@@ -8,7 +8,6 @@ import FundBasket from '@/components/discover/FundBasket';
 import {
   SEBI_RISK_LEVELS,
   type SEBIRiskLevel,
-  recommendFundBasket,
 } from '@/lib/advisor-engine';
 import { buildRecommendation, type RecommendationResult } from '@/lib/recommendation';
 import { Search, RotateCcw, Share2, FileDown, Check } from 'lucide-react';
@@ -95,21 +94,30 @@ function DiscoverContent() {
     saveProfile(level, ans);
   }, []);
 
-  // On mount, check URL params first, then localStorage
-  useEffect(() => {
+  // Initialize from URL params or localStorage (render-time state adjustment)
+  if (stage === 'loading') {
     const riskParam = searchParams.get('risk');
     if (riskParam && isValidRiskLevel(riskParam)) {
-      generateBasket(riskParam);
-      return;
-    }
-
-    const saved = loadSavedProfile();
-    if (saved) {
-      generateBasket(saved.riskLevel, saved.answers);
+      setRiskLevel(riskParam);
+      setBasket(buildRecommendation({}, riskParam));
+      setStage('results');
+      saveProfile(riskParam);
     } else {
-      setStage('profiler');
+      const saved = loadSavedProfile();
+      if (saved) {
+        setRiskLevel(saved.riskLevel);
+        if (saved.answers) setAnswers(saved.answers);
+        setBasket(
+          saved.answers && Object.keys(saved.answers).length > 0
+            ? buildRecommendation(saved.answers, saved.riskLevel)
+            : buildRecommendation({}, saved.riskLevel)
+        );
+        setStage('results');
+      } else {
+        setStage('profiler');
+      }
     }
-  }, [generateBasket, searchParams]);
+  }
 
   const handleProfilerComplete = useCallback(
     (level: SEBIRiskLevel, ans: Record<string, number>) => {

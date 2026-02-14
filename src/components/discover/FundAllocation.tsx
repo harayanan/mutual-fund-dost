@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { type FundRecommendation } from '@/lib/advisor-engine';
 
 interface FundAllocationProps {
@@ -12,18 +13,18 @@ const COLORS = [
 ];
 
 export default function FundAllocation({ recommendations }: FundAllocationProps) {
-  let cumulativePercent = 0;
-
-  const segments = recommendations.map((rec, i) => {
-    const start = cumulativePercent;
-    cumulativePercent += rec.allocation;
-    return {
-      ...rec,
-      color: COLORS[i % COLORS.length],
-      startPercent: start,
-      endPercent: cumulativePercent,
-    };
-  });
+  const segments = useMemo(() =>
+    recommendations.map((rec, i) => {
+      const startPercent = recommendations.slice(0, i).reduce((sum, r) => sum + r.allocation, 0);
+      return {
+        ...rec,
+        color: COLORS[i % COLORS.length],
+        startPercent,
+        endPercent: startPercent + rec.allocation,
+      };
+    }),
+    [recommendations]
+  );
 
   // Build SVG donut chart
   const size = 200;
