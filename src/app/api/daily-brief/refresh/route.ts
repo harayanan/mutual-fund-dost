@@ -15,7 +15,7 @@ export async function POST() {
     // Fetch recent news from news_cache (last 24 hours)
     const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const { data: newsItems, error: newsError } = await supabase
-      .from('news_cache')
+      .from('mfd_news_cache')
       .select('title, summary, source')
       .gte('created_at', twentyFourHoursAgo)
       .order('created_at', { ascending: false })
@@ -43,7 +43,7 @@ export async function POST() {
 
     // Upsert into daily_briefs table
     const { error: upsertError } = await supabase
-      .from('daily_briefs')
+      .from('mfd_daily_briefs')
       .upsert(
         {
           brief_date: today,
@@ -61,7 +61,7 @@ export async function POST() {
     }
 
     const duration = Date.now() - startTime;
-    await supabase.from('data_metadata').upsert(
+    await supabase.from('mfd_data_metadata').upsert(
       {
         key: 'daily_brief_data',
         last_updated: new Date().toISOString(),

@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
 
     // Insert into Supabase
     const supabase = getSupabase();
-    const { error: insertError } = await supabase.from('news_cache').insert(enrichedNews);
+    const { error: insertError } = await supabase.from('mfd_news_cache').insert(enrichedNews);
 
     if (insertError) {
       errors.push(`Cache insert failed: ${insertError.message}`);
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
 
     // Update metadata
     const duration = Date.now() - startTime;
-    await supabase.from('data_metadata').upsert(
+    await supabase.from('mfd_data_metadata').upsert(
       {
         key: 'news_data',
         last_updated: new Date().toISOString(),
@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
     const duration = Date.now() - startTime;
 
     try {
-      await getSupabase().from('data_metadata').upsert(
+      await getSupabase().from('mfd_data_metadata').upsert(
         {
           key: 'news_data',
           last_updated: new Date().toISOString(),

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const { data, error } = await getSupabase()
-      .from('data_metadata')
+      .from('mfd_data_metadata')
       .select('*');
 
     if (error) {

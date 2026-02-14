@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     // Get last updated timestamp
     const { data: meta } = await supabase
-      .from('data_metadata')
+      .from('mfd_data_metadata')
       .select('last_updated')
       .eq('key', 'fund_data')
       .single();
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     // Get latest fund managers from Supabase (scraped from hdfcfund.com)
     const { data: dbFunds } = await supabase
-      .from('funds')
+      .from('mfd_funds')
       .select('id, fund_manager');
 
     if (dbFunds) {

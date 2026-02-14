@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       const fundManager = scrapedManagers.get(fund.id) || fund.fundManager;
 
       // Upsert fund record
-      const { error: fundError } = await supabase.from('funds').upsert(
+      const { error: fundError } = await supabase.from('mfd_funds').upsert(
         {
           id: fund.id,
           name: fund.name,
@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
 
       // Upsert performance record
       if (fund.asOfDate) {
-        const { error: perfError } = await supabase.from('fund_performance').upsert(
+        const { error: perfError } = await supabase.from('mfd_fund_performance').upsert(
           {
             fund_id: fund.id,
             return_1y: fund.return1y,
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
 
     // Update metadata
     const duration = Date.now() - startTime;
-    await supabase.from('data_metadata').upsert(
+    await supabase.from('mfd_data_metadata').upsert(
       {
         key: 'fund_data',
         last_updated: new Date().toISOString(),
@@ -147,7 +147,7 @@ export async function GET(request: NextRequest) {
 
     // Update metadata with failure
     try {
-      await getSupabase().from('data_metadata').upsert(
+      await getSupabase().from('mfd_data_metadata').upsert(
         {
           key: 'fund_data',
           last_updated: new Date().toISOString(),

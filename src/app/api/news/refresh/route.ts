@@ -59,14 +59,14 @@ export async function POST() {
       .map(({ skip, relevance_score, ...rest }) => rest);
 
     const supabase = getSupabase();
-    const { error: insertError } = await supabase.from('news_cache').insert(enrichedNews);
+    const { error: insertError } = await supabase.from('mfd_news_cache').insert(enrichedNews);
 
     if (insertError) {
       console.error('Cache insert failed during manual refresh:', insertError.message);
     }
 
     const duration = Date.now() - startTime;
-    await supabase.from('data_metadata').upsert(
+    await supabase.from('mfd_data_metadata').upsert(
       {
         key: 'news_data',
         last_updated: new Date().toISOString(),

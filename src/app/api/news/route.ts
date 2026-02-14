@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
   try {
     // Serve only from pre-computed cache (populated by cron job)
     let query = getSupabase()
-      .from('news_cache')
+      .from('mfd_news_cache')
       .select('*')
       .not('ai_analysis', 'is', null)
       .not('investor_action', 'is', null);

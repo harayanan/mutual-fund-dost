@@ -11,7 +11,7 @@ export async function GET() {
 
     // Try to get today's brief first
     const { data: todayBrief, error: todayError } = await supabase
-      .from('daily_briefs')
+      .from('mfd_daily_briefs')
       .select('*')
       .eq('brief_date', today)
       .single();
@@ -34,7 +34,7 @@ export async function GET() {
 
     // If no today's brief, get the most recent one
     const { data: latestBrief, error: latestError } = await supabase
-      .from('daily_briefs')
+      .from('mfd_daily_briefs')
       .select('*')
       .order('brief_date', { ascending: false })
       .limit(1)
