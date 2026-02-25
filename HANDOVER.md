@@ -82,8 +82,8 @@ npm run dev                   # localhost:3000
 
 ## Git Status
 
-- **Branch:** main (1 commit ahead of origin)
-- **Uncommitted:** Minor .gitignore + package-lock changes
+- **Branch:** main (up to date with origin)
+- **Clean:** No uncommitted changes
 - **Vercel Project ID:** prj_OwWNQ62NIJSM4M5BCJB0fhBXdSR2
 
 ## Known Constraints
@@ -100,6 +100,19 @@ npm run dev                   # localhost:3000
 - Fallback: All endpoints degrade to static data if Supabase unavailable
 - Core+Satellite: 70% diversified stable + 30% thematic growth
 
+## Recent Session (2026-02-14)
+
+**What was done:**
+- Fixed 2 ESLint errors (React 19 compiler compliance):
+  - Replaced `useEffect` initialization with render-time state adjustment in discover page (avoids `set-state-in-effect` rule)
+  - Wrapped donut chart segment computation in `useMemo` with immutable `slice + reduce` (avoids `immutability` rule)
+- Fixed 7 ESLint warnings:
+  - Removed unused imports (`recommendFundBasket`, `Fund`, `FundBasket`)
+  - Prefixed omitted destructured vars with `_` in news routes
+  - Configured ESLint `no-unused-vars` to allow `_` prefix convention
+- **Result:** 0 errors, 0 warnings — lint is fully clean
+- Deployed to production via Vercel (commit `e143159`)
+
 ## Next Steps
 
 1. Add unit tests (recommendation engine, CAGR calculations)
@@ -107,5 +120,13 @@ npm run dev                   # localhost:3000
 3. Cache fund screener results on /api/funds
 4. Support other fund families (Axis, ICICI, SBI)
 
+## Session: 2026-02-25
+
+### What was done (VPS storage optimization)
+- **Dedicated Supabase instance STOPPED** — the mfd dedicated instance (port 9300) was stopped to reclaim disk. It had zero tables — migration from shared DB never happened.
+- Compose file preserved at `/root/supabase-stacks/mfd/docker-compose.yml`. Restart with: `cd /root/supabase-stacks/mfd && docker compose -p supabase-mfd up -d`
+- **All mfd data is safe** in the shared Supabase (port 8000): 5 tables (mfd_daily_briefs, mfd_data_metadata, mfd_fund_performance, mfd_funds, mfd_news_cache)
+- App still points to shared instance — no impact on functionality.
+
 ---
-*Last reviewed: 2026-02-10*
+*Last reviewed: 2026-02-25*
