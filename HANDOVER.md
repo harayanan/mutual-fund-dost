@@ -131,13 +131,27 @@ npm run dev                   # localhost:3000
 ## Session: 2026-03-15
 
 ### What was done (News & Daily Brief fix)
-- **Root cause:** Supabase tables `mfd_news_cache` and `mfd_daily_briefs` were empty — cron jobs hadn't populated data since 2026-02-14. Pages showed blank/error state.
-- **Fix:** Modified GET endpoints (`/api/news`, `/api/daily-brief`) to auto-refresh on first visit of the day. If no today's data exists, the endpoint triggers RSS fetch + Gemini analysis inline before returning results. Subsequent visits serve cached data instantly.
-- Added `maxDuration = 120` to both GET routes to support the longer first-load.
-- Cron jobs remain as backup but are no longer the sole data source.
-- Manually triggered refresh to populate today's data.
-- Removed stale `PROMPT-LOG.md`.
-- Deployed to production (commit `66d0764`).
+
+**Problem:** News Insights and Daily Brief pages showed no data. Three root causes found:
+
+1. **Vercel env vars pointed to old Supabase cloud** (`pbvhguyczpviagwdmeih.supabase.co`) instead of self-hosted (`supabase.xisunknown.com`). The cloud instance is inaccessible (India ban). Fixed by passing `--build-env` flags in deploy.
+2. **Indian RSS feeds geo-block Vercel IPs** (US-based). All 4 RSS sources (ET, Moneycontrol, Livemint) return nothing from Vercel serverless. Fixed by moving RSS fetch to VPS cron.
+3. **Vercel cron jobs hadn't run since Feb 14.** Hobby plan limitations + above issues.
+
+**Changes:**
+- `src/app/api/news/route.ts` — GET auto-refreshes if no today's data (fallback for when VPS cron fails)
+- `src/app/api/daily-brief/route.ts` — GET auto-generates brief if none for today
+- `src/lib/news-fetcher.ts` — Uses global `fetch()` + `parseString()` instead of `rss-parser`'s HTTP (for serverless compat)
+- `scripts/refresh-news.mjs` — Standalone Node script: RSS → Gemini → Supabase (runs on VPS)
+- `scripts/refresh-news.sh` — Shell wrapper with env loading and log rotation
+- `scripts/deploy.sh` — Vercel deploy with `--build-env` flags (required for CLI deploys)
+- Removed stale `PROMPT-LOG.md`
+
+**VPS Cron:** `0 1,13 * * *` (6:30 AM + 6:30 PM IST) — runs `scripts/refresh-news.sh`
+
+**Deploy note:** Always use `scripts/deploy.sh` or pass `--build-env` flags. Plain `vercel deploy --prod` won't include env vars.
+
+**Commits:** `66d0764`, `1cdbe52`, `013d9e6`
 
 ---
 *Last reviewed: 2026-03-15*
