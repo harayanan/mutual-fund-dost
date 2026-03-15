@@ -4,7 +4,7 @@
 
 ## Status: PRODUCTION-READY
 
-**Version:** 0.2.0 | **Started:** January 2026 | **Last Updated:** February 2026
+**Version:** 0.2.0 | **Started:** January 2026 | **Last Updated:** March 2026
 
 ## Tech Stack
 
@@ -128,5 +128,16 @@ npm run dev                   # localhost:3000
 - **All mfd data is safe** in the shared Supabase (port 8000): 5 tables (mfd_daily_briefs, mfd_data_metadata, mfd_fund_performance, mfd_funds, mfd_news_cache)
 - App still points to shared instance — no impact on functionality.
 
+## Session: 2026-03-15
+
+### What was done (News & Daily Brief fix)
+- **Root cause:** Supabase tables `mfd_news_cache` and `mfd_daily_briefs` were empty — cron jobs hadn't populated data since 2026-02-14. Pages showed blank/error state.
+- **Fix:** Modified GET endpoints (`/api/news`, `/api/daily-brief`) to auto-refresh on first visit of the day. If no today's data exists, the endpoint triggers RSS fetch + Gemini analysis inline before returning results. Subsequent visits serve cached data instantly.
+- Added `maxDuration = 120` to both GET routes to support the longer first-load.
+- Cron jobs remain as backup but are no longer the sole data source.
+- Manually triggered refresh to populate today's data.
+- Removed stale `PROMPT-LOG.md`.
+- Deployed to production (commit `66d0764`).
+
 ---
-*Last reviewed: 2026-02-25*
+*Last reviewed: 2026-03-15*
