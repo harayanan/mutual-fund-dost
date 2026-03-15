@@ -1,12 +1,5 @@
 import Parser from 'rss-parser';
 
-const parser = new Parser({
-  timeout: 10000,
-  headers: {
-    'User-Agent': 'MutualFundDost/1.0',
-  },
-});
-
 export interface NewsItem {
   title: string;
   summary: string;
@@ -38,12 +31,34 @@ function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
 }
 
+async function fetchRssXml(url: string): Promise<string> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+  try {
+    const res = await fetch(url, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; MutualFundDost/1.0)',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+      },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 export async function fetchLatestNews(limit: number = 20): Promise<NewsItem[]> {
   const allNews: NewsItem[] = [];
+  const parser = new Parser();
 
   const feedPromises = RSS_FEEDS.map(async (feed) => {
     try {
-      const parsed = await parser.parseURL(feed.url);
+      // Use global fetch (works on Vercel Edge/Serverless) instead of rss-parser's http module
+      const xml = await fetchRssXml(feed.url);
+      const parsed = await parser.parseString(xml);
       return (parsed.items || []).slice(0, 8).map((item) => ({
         title: item.title || 'Untitled',
         summary: stripHtml(item.contentSnippet || item.content || item.title || '').slice(0, 300),
@@ -52,7 +67,7 @@ export async function fetchLatestNews(limit: number = 20): Promise<NewsItem[]> {
         publishedAt: item.pubDate || new Date().toISOString(),
       }));
     } catch (error) {
-      console.error(`Failed to fetch RSS from ${feed.source}:`, error);
+      console.error(`Failed to fetch RSS from ${feed.source}:`, error instanceof Error ? error.message : error);
       return [];
     }
   });
