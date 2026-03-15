@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { Mic, Square, Upload, Loader2, ChevronDown, ChevronUp, IndianRupee, Shield, PieChart, TrendingUp, AlertTriangle, MessageCircle, Lightbulb, Quote } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Mic, Square, Upload, Loader2, ChevronDown, ChevronUp, IndianRupee, Shield, PieChart, TrendingUp, AlertTriangle, MessageCircle, Lightbulb, Quote, Send, Bot, User } from 'lucide-react';
 import type { AdvisorPlan } from '@/lib/client-planner/engine';
 
 function formatDuration(s: number) {
@@ -17,6 +17,10 @@ export default function PlannerPage() {
   const [plan, setPlan] = useState<AdvisorPlan | null>(null);
   const [error, setError] = useState('');
   const [showTranscript, setShowTranscript] = useState(false);
+  const [chatMessages, setChatMessages] = useState<{ role: 'user' | 'advisor'; text: string }[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -96,6 +100,45 @@ export default function PlannerPage() {
     setTranscript(null);
     setError('');
     setShowTranscript(false);
+    setChatMessages([]);
+    setChatInput('');
+  };
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  const sendChat = async () => {
+    const msg = chatInput.trim();
+    if (!msg || chatLoading) return;
+
+    const newMessages = [...chatMessages, { role: 'user' as const, text: msg }];
+    setChatMessages(newMessages);
+    setChatInput('');
+    setChatLoading(true);
+
+    try {
+      const res = await fetch('/api/planner/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: msg,
+          currentPlan: plan,
+          chatHistory: newMessages,
+        }),
+      });
+      if (!res.ok) throw new Error('Chat failed');
+      const data = await res.json();
+
+      setChatMessages([...newMessages, { role: 'advisor', text: data.reply }]);
+      if (data.updated_plan) {
+        setPlan(data.updated_plan);
+      }
+    } catch {
+      setChatMessages([...newMessages, { role: 'advisor', text: 'Sorry, something went wrong. Try again.' }]);
+    } finally {
+      setChatLoading(false);
+    }
   };
 
   return (
@@ -370,6 +413,77 @@ export default function PlannerPage() {
               <p className="text-sm text-indigo-800">{plan.advisor_notes}</p>
             </div>
           )}
+
+          {/* Chat with Advisor */}
+          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
+              <h2 className="font-semibold text-gray-900 flex items-center gap-2 text-sm">
+                <Bot className="w-4 h-4 text-blue-600" />
+                Refine the Plan
+              </h2>
+              <p className="text-xs text-gray-500 mt-0.5">
+                &ldquo;What if income is 20L?&rdquo; &ldquo;Swap mid-cap for flexi cap&rdquo; &ldquo;He also has 5L in PPF&rdquo;
+              </p>
+            </div>
+
+            {/* Chat messages */}
+            {chatMessages.length > 0 && (
+              <div className="max-h-80 overflow-y-auto p-4 space-y-3">
+                {chatMessages.map((m, i) => (
+                  <div key={i} className={`flex items-start gap-2 ${m.role === 'user' ? 'justify-end' : ''}`}>
+                    {m.role === 'advisor' && (
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                        <Bot className="w-3.5 h-3.5 text-blue-600" />
+                      </div>
+                    )}
+                    <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${
+                      m.role === 'user'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {m.text}
+                    </div>
+                    {m.role === 'user' && (
+                      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                        <User className="w-3.5 h-3.5 text-gray-600" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {chatLoading && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Bot className="w-3.5 h-3.5 text-blue-600" />
+                    </div>
+                    <div className="bg-gray-100 rounded-lg px-3 py-2">
+                      <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+                    </div>
+                  </div>
+                )}
+                <div ref={chatEndRef} />
+              </div>
+            )}
+
+            {/* Chat input */}
+            <div className="p-3 border-t border-gray-100 flex gap-2">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && sendChat()}
+                placeholder="Ask a question or suggest a change..."
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={chatLoading}
+              />
+              <button
+                onClick={sendChat}
+                disabled={!chatInput.trim() || chatLoading}
+                className="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
 
           {/* Disclaimer */}
           <p className="text-xs text-gray-400 text-center py-4">
