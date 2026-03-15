@@ -189,7 +189,120 @@ async function main() {
     console.error('Brief generation failed:', err.message);
   }
 
+  // Generate Monday brief (only on Mondays)
+  const dayOfWeek = new Date().getDay();
+  if (dayOfWeek === 1) {
+    console.log('Monday detected — generating Monday Morning Brief...');
+    try {
+      const weekMonday = new Date().toISOString().split('T')[0];
+
+      const { data: existing } = await supabase
+        .from('mfd_monday_briefs')
+        .select('week_of')
+        .eq('week_of', weekMonday)
+        .single();
+
+      if (!existing) {
+        const { data: funds } = await supabase.from('mfd_funds').select('id, name, sub_category, aum_crores');
+        const { data: performance } = await supabase.from('mfd_fund_performance').select('fund_id, return_1y, return_3y, return_5y, return_10y');
+        const perfMap = new Map((performance || []).map(p => [p.fund_id, p]));
+
+        const fundData = (funds || []).map(f => {
+          const perf = perfMap.get(f.id);
+          return {
+            name: f.name, subCategory: f.sub_category, aumCrores: f.aum_crores,
+            return1Y: perf?.return_1y ?? null, return3Y: perf?.return_3y ?? null,
+            return5Y: perf?.return_5y ?? null, return10Y: perf?.return_10y ?? null,
+          };
+        });
+
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+        const { data: weekNews } = await supabase
+          .from('mfd_news_cache')
+          .select('title, summary, source')
+          .gte('created_at', sevenDaysAgo)
+          .order('created_at', { ascending: false })
+          .limit(40);
+
+        if (weekNews && weekNews.length > 0) {
+          const mondayBrief = await generateMondayBriefVPS(weekNews, fundData);
+          await supabase.from('mfd_monday_briefs').upsert(
+            { week_of: weekMonday, brief_data: mondayBrief, generated_at: new Date().toISOString() },
+            { onConflict: 'week_of' }
+          );
+          await supabase.from('mfd_data_metadata').upsert(
+            { key: 'monday_brief_data', last_updated: new Date().toISOString(), status: 'success', details: { trigger: 'vps-cron', weekOf: weekMonday } },
+            { onConflict: 'key' }
+          );
+          console.log('Monday Morning Brief generated and saved');
+        } else {
+          console.log('Not enough news for Monday brief');
+        }
+      } else {
+        console.log('Monday brief already exists for this week');
+      }
+    } catch (err) {
+      console.error('Monday brief generation failed:', err.message);
+    }
+  }
+
   console.log('Done!');
+}
+
+// --- Monday Brief Generator (VPS version) ---
+async function generateMondayBriefVPS(newsItems, fundData) {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + diff);
+  const weekOf = monday.toISOString().split('T')[0];
+
+  const newsText = newsItems
+    .map((n, i) => `${i + 1}. [${n.source}] ${n.title}\n   ${n.summary}`)
+    .join('\n\n');
+
+  const fundText = fundData
+    .map(f => `${f.name} (${f.subCategory}) — AUM: ₹${f.aumCrores} Cr | 1Y: ${f.return1Y ?? 'N/A'}% | 3Y: ${f.return3Y ?? 'N/A'}% | 5Y: ${f.return5Y ?? 'N/A'}%`)
+    .join('\n');
+
+  const prompt = `You are "Mutual Fund Dost", creating the MONDAY MORNING BRIEF for Indian mutual fund distributors. This is a premium weekly document that makes distributors look brilliant in front of their clients.
+
+Today's date: ${now.toISOString().split('T')[0]}
+Week of: ${weekOf}
+
+LAST WEEK'S NEWS:
+${newsText}
+
+XYZ FUND PERFORMANCE DATA:
+${fundText}
+
+Generate a comprehensive Monday Morning Brief as a JSON object with: marketPulse (7 metrics with label/value/change/direction), niftyWeekSummary, bigPicture (3-4 paragraphs), topStories (5 items with title/source/category/urgency/clientImplication/talkingPoints/affectedClientSegments), actionPlan (8-10 items with task/priority/clientSegment/timing/context), conversationScripts (5 personas: Panicking Client, Opportunity Seeker, SIP Investor, HNI Client, New Prospect — each with opener/talkingPoints/objectionHandler/suggestedFund), sipWinsStat (powerful SIP stat), fundSpotlights (2 hero cards for XYZ Flexi Cap and BAF with aum/returns/categoryRank/whyThisWeek/elevatorPitch/sipStory), fundHeatmap (7 categories with return1W/1M/3M/1Y), weekAhead (5-6 events with date/event/impact/actionTrigger), regulatoryCorner, weeklyWisdom.
+
+CRITICAL: Use EXACT fund return numbers from data above. For market data, estimate from news context. Frame everything for distributors. Give Flexi Cap and BAF hero treatment.
+
+Return ONLY a JSON object, no markdown.`;
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text().replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+  const parsed = JSON.parse(text);
+
+  return {
+    weekOf,
+    generatedAt: new Date().toISOString(),
+    marketPulse: parsed.marketPulse || [],
+    niftyWeekSummary: parsed.niftyWeekSummary || '',
+    bigPicture: parsed.bigPicture || '',
+    topStories: parsed.topStories || [],
+    actionPlan: parsed.actionPlan || [],
+    conversationScripts: parsed.conversationScripts || [],
+    sipWinsStat: parsed.sipWinsStat || '',
+    fundSpotlights: parsed.fundSpotlights || [],
+    fundHeatmap: parsed.fundHeatmap || [],
+    weekAhead: parsed.weekAhead || [],
+    regulatoryCorner: parsed.regulatoryCorner || '',
+    weeklyWisdom: parsed.weeklyWisdom || '',
+  };
 }
 
 main().catch((err) => {
