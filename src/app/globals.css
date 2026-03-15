@@ -71,4 +71,26 @@ input[type='range']::-moz-range-thumb {
   .rounded-2xl {
     break-inside: avoid;
   }
+
+  /* Monday Brief print layout */
+  .monday-brief-page {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .monday-brief-page .page-break {
+    break-after: page;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .monday-brief-page table {
+    break-inside: avoid;
+  }
+
+  .monday-brief-page .hero-card {
+    break-inside: avoid;
+  }
 }

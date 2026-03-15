@@ -44,6 +44,12 @@ export default function Header() {
               Daily Brief
             </Link>
             <Link
+              href="/monday-brief"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+            >
+              Monday Brief
+            </Link>
+            <Link
               href="/planner"
               className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
             >
@@ -100,6 +106,13 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Daily Brief
+              </Link>
+              <Link
+                href="/monday-brief"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Monday Brief
               </Link>
               <Link
                 href="/planner"
