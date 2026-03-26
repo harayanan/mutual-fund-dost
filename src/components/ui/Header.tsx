@@ -13,17 +13,17 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">M</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-lg">H</span>
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900 leading-tight">
-                Mutual Fund Dost
+                HDFC MFD Hub
               </h1>
               <p className="text-[10px] text-gray-500 -mt-0.5">
-                Your XYZ MF Guide
+                For HDFC Mutual Fund Distributors
                 <span className="ml-1 text-gray-400" title={`Built ${process.env.NEXT_PUBLIC_BUILD_TIME ?? ''}`}>
-                  v{process.env.NEXT_PUBLIC_APP_VERSION ?? '0.1.0'}
+                  v{process.env.NEXT_PUBLIC_APP_VERSION ?? '1.0.0'}
                 </span>
               </p>
             </div>
@@ -32,46 +32,34 @@ export default function Header() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             <Link
-              href="/news"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              News Insights
-            </Link>
-            <Link
-              href="/daily-brief"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              Daily Brief
-            </Link>
-            <Link
               href="/monday-brief"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
             >
               Monday Brief
             </Link>
             <Link
+              href="/funds"
+              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
+            >
+              Fund Dashboard
+            </Link>
+            <Link
               href="/planner"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
             >
               Client Planner
             </Link>
             <Link
-              href="/discover"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              href="/news"
+              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
             >
-              Discover Funds
+              News Insights
             </Link>
             <Link
-              href="/funds"
-              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
+              href="/monday-brief"
+              className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
             >
-              Fund Screener
-            </Link>
-            <Link
-              href="/discover"
-              className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              Get Started
+              This Week&apos;s Brief
             </Link>
           </nav>
 
@@ -94,53 +82,39 @@ export default function Header() {
           <div className="md:hidden pb-4 border-t border-gray-100 mt-2 pt-4">
             <nav className="flex flex-col gap-3">
               <Link
-                href="/news"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                News Insights
-              </Link>
-              <Link
-                href="/daily-brief"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Daily Brief
-              </Link>
-              <Link
                 href="/monday-brief"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
+                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Monday Brief
               </Link>
               <Link
+                href="/funds"
+                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Fund Dashboard
+              </Link>
+              <Link
                 href="/planner"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
+                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Client Planner
               </Link>
               <Link
-                href="/discover"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
+                href="/news"
+                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Discover Funds
+                News Insights
               </Link>
               <Link
-                href="/funds"
-                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
+                href="/monday-brief"
+                className="bg-red-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-red-700 text-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Fund Screener
-              </Link>
-              <Link
-                href="/discover"
-                className="bg-blue-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-blue-700 text-center"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Get Started
+                This Week&apos;s Brief
               </Link>
             </nav>
           </div>

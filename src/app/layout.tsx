@@ -16,17 +16,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Mutual Fund Dost - Your XYZ Mutual Fund Guide',
+  title: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
   description:
-    'Your trusted guide for XYZ Mutual Fund investments. Get AI-powered news insights, personalized fund recommendations based on your risk profile, and expert advice for long-term wealth creation.',
+    'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools. Win more client conversations every week.',
   keywords: [
-    'mutual fund',
-    'XYZ',
-    'investment',
+    'HDFC mutual fund',
+    'MFD tools',
+    'mutual fund distributor',
+    'HDFC AMC',
+    'fund performance',
+    'Monday Morning Brief',
+    'SIP calculator',
     'India',
-    'SIP',
-    'risk profiler',
-    'wealth creation',
   ],
 };
 
