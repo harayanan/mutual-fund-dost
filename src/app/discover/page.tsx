@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useState, useCallback } from 'react';
+import { track } from '@vercel/analytics';
 import { useSearchParams } from 'next/navigation';
 import RiskProfiler from '@/components/discover/RiskProfiler';
 import RiskSliderControl from '@/components/discover/RiskSliderControl';
@@ -89,6 +90,7 @@ function DiscoverContent() {
     const result = ans && Object.keys(ans).length > 0
       ? buildRecommendation(ans, level)
       : buildRecommendation({}, level);
+    track('recommendation_generated', { risk_level: level });
     setBasket(result);
     setStage('results');
     saveProfile(level, ans);

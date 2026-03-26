@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { track } from '@vercel/analytics';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
@@ -87,6 +88,7 @@ function SIPPlanner() {
 
   const calculate = useCallback(() => {
     if (target <= 0 || years <= 0 || rate <= 0) return;
+    track('sip_calculation_run', { target_corpus: target, years, expected_rate: rate });
     setResult(calcSIP(target, years, rate));
   }, [target, years, rate]);
 
@@ -389,6 +391,7 @@ function CGTaxCalc() {
     const buyNAV = parseFloat(buyNAVInput);
     if (!u || !buyNAV || !sellNAV || !buyDate || !sellDate) return;
     if (new Date(buyDate) >= new Date(sellDate)) return;
+    track('capital_gains_calculation_run', { fund_type: isEquity ? 'equity' : 'debt' });
     setCalculating(true);
     setTimeout(() => {
       setResult(calcTax(u, buyNAV, sellNAV, buyDate, sellDate, isEquity));

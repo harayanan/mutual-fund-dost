@@ -4,6 +4,8 @@ import './globals.css';
 import Header from '@/components/ui/Header';
 import Footer from '@/components/ui/Footer';
 import DisclaimerBanner from '@/components/ui/DisclaimerBanner';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const BASE_URL = 'https://mutual-fund-dost.vercel.app';
 
@@ -120,6 +122,8 @@ export default function RootLayout({
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

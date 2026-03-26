@@ -1,11 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { track } from '@vercel/analytics';
 import MondayBriefDocument from '@/components/monday-brief/MondayBriefDocument';
 import { Calendar, Info, Printer } from 'lucide-react';
 
 export default function MondayBriefPage() {
   const [lang, setLang] = useState<'en' | 'hi'>('en');
+
+  useEffect(() => {
+    track('monday_brief_viewed');
+  }, []);
 
   const now = new Date();
   // Find this week's Monday
@@ -41,7 +46,11 @@ export default function MondayBriefPage() {
 
           {/* Hindi / English toggle */}
           <button
-            onClick={() => setLang(l => l === 'en' ? 'hi' : 'en')}
+            onClick={() => {
+              const next = lang === 'en' ? 'hi' : 'en';
+              track('monday_brief_lang_toggle', { language: next });
+              setLang(next);
+            }}
             className="inline-flex items-center gap-2 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
             title={lang === 'en' ? 'हिन्दी में देखें' : 'View in English'}
           >
@@ -70,7 +79,7 @@ export default function MondayBriefPage() {
         {/* Download PDF button */}
         <div className="mt-4 flex justify-end">
           <button
-            onClick={() => window.print()}
+            onClick={() => { track('monday_brief_printed', { language: lang }); window.print(); }}
             className="inline-flex items-center gap-2 bg-[#e31e24] text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-sm"
           >
             <Printer className="w-4 h-4" />

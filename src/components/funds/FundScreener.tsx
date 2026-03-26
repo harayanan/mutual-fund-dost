@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import { track } from '@vercel/analytics';
 import { HDFC_FUNDS } from '@/data/hdfc-funds';
 import {
   ArrowUpDown,
@@ -204,6 +205,7 @@ export default function FundScreener() {
         next.delete(cat);
       } else {
         next.add(cat);
+        track('fund_screener_filter', { filter_type: 'category', value: cat });
       }
       return next;
     });
@@ -289,7 +291,10 @@ export default function FundScreener() {
               <div className="text-xs font-medium text-gray-500 mb-2">Risk Level</div>
               <select
                 value={riskLevel}
-                onChange={(e) => setRiskLevel(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value) track('fund_screener_filter', { filter_type: 'risk_level', value: e.target.value });
+                  setRiskLevel(e.target.value);
+                }}
                 className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 {RISK_LEVELS.map((r) => (
