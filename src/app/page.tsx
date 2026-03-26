@@ -1,4 +1,18 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'HDFC MFD Hub — AI Tools for HDFC Mutual Fund Distributors',
+  description:
+    'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund performance heatmap, SIP planner, capital gains calculator.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: 'HDFC MFD Hub — AI Tools for HDFC Mutual Fund Distributors',
+    description:
+      'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund performance heatmap, SIP planner, capital gains calculator.',
+    url: '/',
+  },
+};
 import {
   Newspaper,
   Calendar,

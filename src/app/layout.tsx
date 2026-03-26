@@ -5,6 +5,8 @@ import Header from '@/components/ui/Header';
 import Footer from '@/components/ui/Footer';
 import DisclaimerBanner from '@/components/ui/DisclaimerBanner';
 
+const BASE_URL = 'https://mutual-fund-dost.vercel.app';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -16,7 +18,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
+    template: '%s | HDFC MFD Hub',
+  },
   description:
     'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools. Win more client conversations every week.',
   keywords: [
@@ -29,6 +35,69 @@ export const metadata: Metadata = {
     'SIP calculator',
     'India',
   ],
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'HDFC MFD Hub',
+    title: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
+    description:
+      'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools.',
+    url: BASE_URL,
+    images: [
+      {
+        url: '/og-default.png',
+        width: 1200,
+        height: 630,
+        alt: 'HDFC MFD Hub',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
+    description:
+      'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools.',
+    images: ['/og-default.png'],
+  },
+};
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${BASE_URL}/#website`,
+      url: BASE_URL,
+      name: 'HDFC MFD Hub',
+      description: 'AI-powered tools for HDFC Mutual Fund distributors',
+      inLanguage: 'en-IN',
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': `${BASE_URL}/#webapp`,
+      name: 'HDFC MFD Hub',
+      url: BASE_URL,
+      applicationCategory: 'FinanceApplication',
+      operatingSystem: 'Web',
+      description:
+        'AI-powered platform for HDFC Mutual Fund distributors providing Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools.',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'INR',
+      },
+      featureList: [
+        'Monday Morning Brief for MFDs',
+        'Fund Performance Dashboard with heatmap',
+        'SIP Goal Planner',
+        'Capital Gains Tax Calculator',
+        'AI-powered fund recommendations',
+        'Market news analysis',
+      ],
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -38,6 +107,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
