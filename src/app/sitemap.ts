@@ -23,12 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${BASE_URL}/planner`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
       url: `${BASE_URL}/news`,
       lastModified: new Date(),
       changeFrequency: 'daily',
@@ -44,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${BASE_URL}/discover`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.7,
+      priority: 0.8,
     },
   ];
 }
