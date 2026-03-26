@@ -274,6 +274,16 @@ function DiscoverContent() {
 
           {/* Fund Basket */}
           <FundBasket key={basket.riskLevel} basket={basket} />
+
+          {/* SEBI Compliance Disclaimer */}
+          <div className="mt-4 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 text-[11px] text-amber-800 leading-relaxed print:hidden">
+            <strong>Illustrative only — not investment advice.</strong> Fund allocations are
+            generated algorithmically based on your risk profile inputs and are for distributor
+            reference only. Mutual funds are subject to market risks. Past performance is not
+            indicative of future results. Please read all scheme information documents carefully
+            before advising clients. Ensure suitability for each client&apos;s individual
+            circumstances. Consult a SEBI-registered investment advisor for personalised advice.
+          </div>
         </div>
       )}
     </div>

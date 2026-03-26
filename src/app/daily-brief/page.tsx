@@ -40,8 +40,8 @@ export default function DailyBriefPage() {
               <p className="text-xs text-orange-600 leading-relaxed">
                 Start your day with AI-curated insights designed specifically for mutual fund distributors.
                 Get the top stories affecting your clients, ready-to-use conversation starters,
-                and prioritized action items. Everything is framed to help you serve your clients better,
-                not as investment advice. Brief is refreshed daily.
+                and prioritized action items. For distributor use only — not for direct client sharing.
+                Brief is refreshed daily at 2 AM IST. Verify market data before client calls.
               </p>
             </div>
           </div>

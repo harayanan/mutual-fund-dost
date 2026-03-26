@@ -412,6 +412,7 @@ function CGTaxCalc() {
           <Info className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
           <p className="text-xs text-amber-800 leading-relaxed">
             Based on Finance Act 2024 rates: STCG equity 20%, LTCG equity 12.5% (₹1.25L exempt), debt funds at slab rate.
+            Last updated: Finance Act 2024. Consult your tax advisor for current rates and individual liability.
           </p>
         </div>
 

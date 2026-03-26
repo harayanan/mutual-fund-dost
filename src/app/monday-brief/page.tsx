@@ -69,8 +69,8 @@ export default function MondayBriefPage() {
               </p>
               <p className="text-xs text-red-700 leading-relaxed">
                 {lang === 'hi'
-                  ? 'इस सप्ताह के ग्राहक संवाद के लिए सब कुछ एक प्रिंट-रेडी दस्तावेज़ में। बाज़ार का संदर्भ, मुख्य खबरें, कार्य योजना, बातचीत की स्क्रिप्ट, और आने वाले सप्ताह का रडार।'
-                  : 'Everything you need for client conversations this week in one print-ready document. Market context, top stories with talking points, a full action plan, conversation scripts for 5 client personas, star fund highlights, and a week-ahead radar. Print it, keep it on your desk, and walk into every client meeting prepared.'}
+                  ? 'इस सप्ताह के ग्राहक संवाद के लिए सब कुछ एक प्रिंट-रेडी दस्तावेज़ में। बाज़ार का संदर्भ, मुख्य खबरें, कार्य योजना, बातचीत की स्क्रिप्ट, और आने वाले सप्ताह का रडार। AI-निर्मित — ग्राहकों से बात करने से पहले बाज़ार डेटा सत्यापित करें।'
+                  : 'Everything you need for client conversations this week in one print-ready document. Market context, top stories with talking points, a full action plan, conversation scripts for 5 client personas, star fund highlights, and a week-ahead radar. AI-generated — verify market data before client calls.'}
               </p>
             </div>
           </div>

@@ -608,8 +608,8 @@ export default function FundScreener() {
 
       {/* Bottom Disclaimer */}
       <div className="mt-6 text-[10px] text-gray-400 text-center">
-        All data shown is for <strong>HDFC Direct Growth</strong> plans. Return data is CAGR as of {HDFC_FUNDS[0]?.asOfDate}. For distributor reference only.
-        Past performance is not indicative of future results. Mutual fund investments are subject to market risks.
+        All data shown is for <strong>HDFC Direct Growth</strong> plans. Return data (1Y/3Y/5Y/10Y) is historical CAGR as of {HDFC_FUNDS[0]?.asOfDate} — for distributor reference only, not for fund selection or client-facing use.
+        Past performance is not indicative of future results. Mutual fund investments are subject to market risks. Please read all scheme-related documents carefully.
       </div>
     </div>
   );
