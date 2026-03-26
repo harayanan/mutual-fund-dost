@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm run lint:*)",
+      "Bash(git -C /root/claudecode/mutual-fund-dost status:*)",
+      "Bash(git -C /root/claudecode/mutual-fund-dost diff)",
+      "Bash(git -C /root/claudecode/mutual-fund-dost log --oneline -5)",
+      "Bash(git -C /root/claudecode/mutual-fund-dost add eslint.config.mjs src/app/api/cron/refresh-news/route.ts src/app/api/news/refresh/route.ts src/app/discover/page.tsx src/components/discover/FundAllocation.tsx src/components/funds/FundScreener.tsx src/lib/recommendation/index.ts)",
+      "Bash(git -C:*)",
+      "Bash(gh api:*)",
+      "Bash(npx vercel ls:*)"
+    ]
+  }
+}

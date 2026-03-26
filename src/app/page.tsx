@@ -4,12 +4,12 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'HDFC MFD Hub — AI Tools for HDFC Mutual Fund Distributors',
   description:
-    'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund performance heatmap, SIP planner, capital gains calculator, portfolio statement generator.',
+    'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund screener, SIP planner, capital gains calculator, and trail commission estimator.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'HDFC MFD Hub — AI Tools for HDFC Mutual Fund Distributors',
     description:
-      'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund performance heatmap, SIP planner, capital gains calculator, portfolio statement generator.',
+      'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund screener, SIP planner, capital gains calculator, and trail commission estimator.',
     url: '/',
   },
 };
@@ -22,7 +22,6 @@ import {
   TrendingUp,
   Users,
   MessageSquare,
-  IndianRupee,
 } from 'lucide-react';
 
 export default function Home() {
@@ -171,34 +170,6 @@ export default function Home() {
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
                       <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Link>
-
-            {/* Portfolio Statement */}
-            <Link href="/portfolio-statement" className="group">
-              <div className="bg-gradient-to-br from-slate-50 to-amber-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-amber-300">
-                <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center mb-4">
-                  <IndianRupee className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Portfolio Statement
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                  Enter client holdings, get live AMFI NAVs, and generate a
-                  clean print-ready portfolio statement in seconds. No signup required.
-                </p>
-                <ul className="space-y-1.5">
-                  {[
-                    'Live NAV from AMFI India',
-                    'Gain/loss + annualised return',
-                    'Print-ready PDF output',
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
-                      <div className="w-1.5 h-1.5 bg-amber-500 rounded-full" />
                       {item}
                     </li>
                   ))}
