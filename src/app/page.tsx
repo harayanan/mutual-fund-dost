@@ -206,6 +206,34 @@ export default function Home() {
               </div>
             </Link>
 
+            {/* Commission Estimator */}
+            <Link href="/commission-estimator" className="group">
+              <div className="bg-gradient-to-br from-slate-50 to-purple-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-purple-300">
+                <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
+                  <TrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  Trail Commission Estimator
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                  Model your annual trail income from your HDFC AUM. Enter AUM by category,
+                  see current income, and project 10-year growth with SIP additions.
+                </p>
+                <ul className="space-y-1.5">
+                  {[
+                    'Blended trail rate by category',
+                    '10-year income projection',
+                    'SIP growth scenario model',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
+                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Link>
+
             {/* News Insights */}
             <Link href="/news" className="group">
               <div className="bg-gradient-to-br from-slate-50 to-indigo-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-indigo-300">
