@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: '%s | HDFC MFD Hub',
   },
   description:
-    'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools. Win more client conversations every week.',
+    'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, AI fund finder, and market news insights. Win more client conversations every week.',
   keywords: [
     'HDFC mutual fund',
     'MFD tools',
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     'HDFC AMC',
     'fund performance',
     'Monday Morning Brief',
-    'SIP calculator',
+    'fund recommendation',
     'India',
   ],
   alternates: {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     siteName: 'HDFC MFD Hub',
     title: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
     description:
-      'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools.',
+      'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, AI fund finder, and market news insights.',
     url: BASE_URL,
     images: [
       {
