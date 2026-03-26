@@ -109,6 +109,7 @@ export interface MarketMetric {
 
 export interface WeeklyStory {
   title: string;
+  title_hi?: string;
   source: string;
   category: string;
   urgency: 'high' | 'medium' | 'low';
@@ -121,14 +122,19 @@ export interface WeeklyStory {
 
 export interface ClientActionItem {
   task: string;
+  task_hi?: string;
   priority: 'high' | 'medium' | 'low';
   clientSegment: string;
+  clientSegment_hi?: string;
   timing: string;
+  timing_hi?: string;
   context: string;
+  context_hi?: string;
 }
 
 export interface ConversationScript {
   persona: string;
+  persona_hi?: string;
   opener: string;
   opener_hi?: string;
   talkingPoints: string[];
@@ -145,9 +151,13 @@ export interface FundSpotlight {
   return3Y: string;
   return5Y: string;
   categoryRank: string;
+  categoryRank_hi?: string;
   whyThisWeek: string;
+  whyThisWeek_hi?: string;
   elevatorPitch: string;
+  elevatorPitch_hi?: string;
   sipStory: string;
+  sipStory_hi?: string;
 }
 
 export interface FundHeatmapRow {
@@ -161,8 +171,11 @@ export interface FundHeatmapRow {
 export interface WeekAheadEvent {
   date: string;
   event: string;
+  event_hi?: string;
   impact: string;
+  impact_hi?: string;
   actionTrigger: string;
+  actionTrigger_hi?: string;
 }
 
 export interface MondayBrief {
@@ -171,6 +184,7 @@ export interface MondayBrief {
   // Page 1
   marketPulse: MarketMetric[];
   niftyWeekSummary: string;
+  niftyWeekSummary_hi?: string;
   bigPicture: string;
   bigPicture_hi?: string;
   topStories: WeeklyStory[];
@@ -331,10 +345,12 @@ Return a JSON object with this EXACT structure:
     {"label": "DII Flow (₹ Cr)", "value": "+9,800", "change": "", "direction": "up"}
   ],
   "niftyWeekSummary": "Brief 1-line describing the week's Nifty trajectory shape (e.g., 'Steady decline all week with Friday selloff')",
+  "niftyWeekSummary_hi": "Nifty की इस सप्ताह की दिशा का हिंदी विवरण",
   "bigPicture": "2 short paragraphs, max 100 words total. Written like a senior colleague briefing an MFD distributor before their Monday calls — concrete, numbers-driven, no padding.",
   "topStories": [
     {
       "title": "Headline",
+      "title_hi": "Hindi headline in Devanagari",
       "source": "Source",
       "category": "macro|sector|regulatory|market|geopolitical|company",
       "urgency": "high|medium|low",
@@ -348,15 +364,20 @@ Return a JSON object with this EXACT structure:
   "actionPlan": [
     {
       "task": "Specific actionable task",
+      "task_hi": "हिंदी में कार्य विवरण",
       "priority": "high|medium|low",
       "clientSegment": "Who this applies to",
+      "clientSegment_hi": "हिंदी में ग्राहक वर्ग",
       "timing": "Monday|Tuesday|Mid-week|By Friday",
-      "context": "1-line why this matters now"
+      "timing_hi": "सोमवार|मंगलवार|सप्ताह के मध्य में|शुक्रवार तक",
+      "context": "1-line why this matters now",
+      "context_hi": "हिंदी में एक पंक्ति में क्यों यह महत्वपूर्ण है"
     }
   ],
   "conversationScripts": [
     {
       "persona": "The Panicking Client",
+      "persona_hi": "घबराया हुआ निवेशक",
       "opener": "Natural opening line to use",
       "opener_hi": "Hindi opener in Devanagari script",
       "talkingPoints": ["point1", "point2", "point3"],
@@ -367,6 +388,7 @@ Return a JSON object with this EXACT structure:
     },
     {
       "persona": "The SIP Investor",
+      "persona_hi": "एसआईपी निवेशक",
       "opener": "...",
       "opener_hi": "...",
       "talkingPoints": ["..."],
@@ -377,6 +399,7 @@ Return a JSON object with this EXACT structure:
     },
     {
       "persona": "The New Prospect",
+      "persona_hi": "नया संभावित ग्राहक",
       "opener": "...",
       "opener_hi": "...",
       "talkingPoints": ["..."],
@@ -396,9 +419,13 @@ Return a JSON object with this EXACT structure:
       "return3Y": "22.9%",
       "return5Y": "21.0%",
       "categoryRank": "Rank X/35 in Flexi Cap",
+      "categoryRank_hi": "फ्लेक्सी कैप में रैंक X/35",
       "whyThisWeek": "Why this fund is relevant given this week's market conditions",
+      "whyThisWeek_hi": "इस सप्ताह के बाजार में यह फंड क्यों प्रासंगिक है",
       "elevatorPitch": "30-second pitch a distributor can use with a client",
-      "sipStory": "₹1 lakh invested 10 years ago is now ₹X.XX lakhs"
+      "elevatorPitch_hi": "30 सेकंड की पिच जो डिस्ट्रीब्यूटर ग्राहक के साथ उपयोग कर सकते हैं",
+      "sipStory": "₹1 lakh invested 10 years ago is now ₹X.XX lakhs",
+      "sipStory_hi": "10 साल पहले ₹1 लाख का निवेश अब ₹X.XX लाख है"
     },
     {
       "fundName": "HDFC Balanced Advantage Fund",
@@ -407,9 +434,13 @@ Return a JSON object with this EXACT structure:
       "return3Y": "...",
       "return5Y": "...",
       "categoryRank": "...",
+      "categoryRank_hi": "...",
       "whyThisWeek": "Include current equity/debt allocation and how the fund auto-managed risk during the week's volatility",
+      "whyThisWeek_hi": "...",
       "elevatorPitch": "...",
-      "sipStory": "..."
+      "elevatorPitch_hi": "...",
+      "sipStory": "...",
+      "sipStory_hi": "..."
     }
   ],
   "fundHeatmap": [
@@ -425,8 +456,11 @@ Return a JSON object with this EXACT structure:
     {
       "date": "Mon 17 Mar",
       "event": "Event description",
+      "event_hi": "हिंदी में घटना का विवरण",
       "impact": "Potential market impact",
-      "actionTrigger": "If X happens, discuss Y with Z clients"
+      "impact_hi": "हिंदी में संभावित बाजार प्रभाव",
+      "actionTrigger": "If X happens, discuss Y with Z clients",
+      "actionTrigger_hi": "यदि X हो, तो Z ग्राहकों के साथ Y पर चर्चा करें"
     }
   ],
   "regulatoryCorner": "Any SEBI/AMFI updates, NFO launches, scheme changes, or tax-related deadlines. If nothing notable, say 'No major regulatory updates this week.'",
@@ -457,6 +491,7 @@ CRITICAL: Use actual numbers from the fund data provided. For fund returns, use 
     generatedAt: new Date().toISOString(),
     marketPulse: parsed.marketPulse || [],
     niftyWeekSummary: parsed.niftyWeekSummary || '',
+    niftyWeekSummary_hi: parsed.niftyWeekSummary_hi,
     bigPicture: parsed.bigPicture || '',
     bigPicture_hi: parsed.bigPicture_hi,
     topStories: parsed.topStories || [],

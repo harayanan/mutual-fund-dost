@@ -391,7 +391,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
       {/* Nifty Week Summary */}
       {brief.niftyWeekSummary && (
         <div className="bg-gray-50 border border-t-0 border-gray-200 px-6 py-2">
-          <p className="text-xs text-gray-600 italic">{brief.niftyWeekSummary}</p>
+          <p className="text-xs text-gray-600 italic">{lang === 'hi' && brief.niftyWeekSummary_hi ? brief.niftyWeekSummary_hi : brief.niftyWeekSummary}</p>
         </div>
       )}
 
@@ -429,7 +429,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                     {story.category}
                   </span>
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1">{story.title}</h3>
+                <h3 className="text-sm font-bold text-gray-900 mb-1">{lang === 'hi' && story.title_hi ? story.title_hi : story.title}</h3>
                 <p className="text-xs text-gray-600 leading-relaxed mb-2">
                   {lang === 'hi' && story.clientImplication_hi ? story.clientImplication_hi : story.clientImplication}
                 </p>
@@ -504,10 +504,10 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                   className={`border-b border-gray-100 ${idx % 2 === 1 ? 'bg-gray-50' : ''}`}
                 >
                   <td className="py-2 px-2">{priorityBadge(item.priority, t)}</td>
-                  <td className="py-2 px-2 font-medium text-gray-900">{item.task}</td>
-                  <td className="py-2 px-2 text-gray-600">{item.clientSegment}</td>
-                  <td className="py-2 px-2 text-gray-600">{item.timing}</td>
-                  <td className="py-2 px-2 text-gray-500">{item.context}</td>
+                  <td className="py-2 px-2 font-medium text-gray-900">{lang === 'hi' && item.task_hi ? item.task_hi : item.task}</td>
+                  <td className="py-2 px-2 text-gray-600">{lang === 'hi' && item.clientSegment_hi ? item.clientSegment_hi : item.clientSegment}</td>
+                  <td className="py-2 px-2 text-gray-600">{lang === 'hi' && item.timing_hi ? item.timing_hi : item.timing}</td>
+                  <td className="py-2 px-2 text-gray-500">{lang === 'hi' && item.context_hi ? item.context_hi : item.context}</td>
                 </tr>
               ))}
             </tbody>
@@ -540,7 +540,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                 className="border border-gray-100 rounded-lg overflow-hidden"
               >
                 <div className="bg-blue-50 px-3 py-2">
-                  <h3 className="text-xs font-bold text-blue-800">{script.persona}</h3>
+                  <h3 className="text-xs font-bold text-blue-800">{lang === 'hi' && script.persona_hi ? script.persona_hi : script.persona}</h3>
                 </div>
                 <div className="px-3 py-2.5 space-y-2">
                   <p className="text-xs text-gray-700 italic">
@@ -630,7 +630,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                       </table>
                     </div>
                     {fund.categoryRank && (
-                      <p className="text-[10px] text-gray-500">{fund.categoryRank}</p>
+                      <p className="text-[10px] text-gray-500">{lang === 'hi' && fund.categoryRank_hi ? fund.categoryRank_hi : fund.categoryRank}</p>
                     )}
                     {fund.whyThisWeek && (
                       <div>
@@ -638,7 +638,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                           {t.whyThisWeek}
                         </p>
                         <p className="text-xs text-gray-700 leading-relaxed">
-                          {fund.whyThisWeek}
+                          {lang === 'hi' && fund.whyThisWeek_hi ? fund.whyThisWeek_hi : fund.whyThisWeek}
                         </p>
                       </div>
                     )}
@@ -648,7 +648,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                           {t.elevatorPitch}
                         </p>
                         <p className="text-xs text-blue-800 leading-relaxed">
-                          {fund.elevatorPitch}
+                          {lang === 'hi' && fund.elevatorPitch_hi ? fund.elevatorPitch_hi : fund.elevatorPitch}
                         </p>
                       </div>
                     )}
@@ -657,7 +657,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                         <p className="text-[10px] font-semibold text-green-600 mb-0.5">
                           {t.sipStory}
                         </p>
-                        <p className="text-xs text-green-800 leading-relaxed">{fund.sipStory}</p>
+                        <p className="text-xs text-green-800 leading-relaxed">{lang === 'hi' && fund.sipStory_hi ? fund.sipStory_hi : fund.sipStory}</p>
                       </div>
                     )}
                   </div>
@@ -754,13 +754,13 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                     {event.date}
                   </span>
                   <div className="flex-1">
-                    <span className="text-xs text-gray-800 font-medium">{event.event}</span>
-                    {event.impact && (
-                      <span className="text-xs text-gray-500"> — {event.impact}</span>
+                    <span className="text-xs text-gray-800 font-medium">{lang === 'hi' && event.event_hi ? event.event_hi : event.event}</span>
+                    {(event.impact || event.impact_hi) && (
+                      <span className="text-xs text-gray-500"> — {lang === 'hi' && event.impact_hi ? event.impact_hi : event.impact}</span>
                     )}
-                    {event.actionTrigger && (
+                    {(event.actionTrigger || event.actionTrigger_hi) && (
                       <p className="text-[10px] text-blue-600 italic mt-0.5">
-                        {event.actionTrigger}
+                        {lang === 'hi' && event.actionTrigger_hi ? event.actionTrigger_hi : event.actionTrigger}
                       </p>
                     )}
                   </div>
