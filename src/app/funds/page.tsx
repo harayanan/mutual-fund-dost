@@ -1,48 +1,62 @@
 'use client';
 
+import { useState } from 'react';
 import FundScreener from '@/components/funds/FundScreener';
-import { BarChart3, Info } from 'lucide-react';
+import PerformanceHeatmap from '@/components/funds/PerformanceHeatmap';
+import { BarChart3, Flame, Search } from 'lucide-react';
+
+type Tab = 'screener' | 'heatmap';
 
 export default function FundsPage() {
+  const [activeTab, setActiveTab] = useState<Tab>('screener');
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       {/* Page Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center">
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-white" />
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Fund Screener
+              Fund Dashboard
             </h1>
             <p className="text-sm text-gray-500">
-              All 60 XYZ mutual fund schemes with detailed performance data
+              All 60 HDFC mutual fund schemes — screener and performance heatmap
             </p>
-          </div>
-        </div>
-
-        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mt-4">
-          <div className="flex items-start gap-2">
-            <Info className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm text-emerald-800 font-medium mb-1">
-                How to Use the Screener
-              </p>
-              <p className="text-xs text-emerald-600 leading-relaxed">
-                Search, filter, and sort all XYZ funds by returns, AUM, expense
-                ratio, risk level, and more. Select up to 4 funds to compare
-                them side-by-side with automatic best-in-class highlighting. Click
-                any column header to sort, or use the quick-sort chips. Data is
-                auto-refreshed daily from AMFI.
-              </p>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Fund Screener */}
-      <FundScreener />
+      {/* Tab Bar */}
+      <div className="flex gap-1 p-1 bg-gray-100 rounded-xl mb-6 w-fit">
+        <button
+          onClick={() => setActiveTab('screener')}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            activeTab === 'screener'
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <Search className="w-4 h-4" />
+          Fund Screener
+        </button>
+        <button
+          onClick={() => setActiveTab('heatmap')}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+            activeTab === 'heatmap'
+              ? 'bg-white text-gray-900 shadow-sm'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <Flame className="w-4 h-4" />
+          Performance Heatmap
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'screener' ? <FundScreener /> : <PerformanceHeatmap />}
     </div>
   );
 }
