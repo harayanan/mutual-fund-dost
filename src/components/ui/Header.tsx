@@ -44,10 +44,10 @@ export default function Header() {
               Fund Dashboard
             </Link>
             <Link
-              href="/planner"
+              href="/discover"
               className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
             >
-              Client Planner
+              Fund Finder
             </Link>
             <Link
               href="/news"
@@ -96,11 +96,11 @@ export default function Header() {
                 Fund Dashboard
               </Link>
               <Link
-                href="/planner"
+                href="/discover"
                 className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Client Planner
+                Fund Finder
               </Link>
               <Link
                 href="/news"

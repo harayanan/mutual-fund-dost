@@ -94,8 +94,8 @@ export default function Home() {
                   Monday Morning Brief
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                  Weekly playbook: market summary, five key stories with client scripts,
-                  fund spotlight, objection of the week, and week-ahead radar.
+                  Weekly playbook: market summary, 3 top stories with client scripts,
+                  fund spotlight, week-ahead radar, and regulatory corner.
                   Print it. Walk into every meeting prepared.
                 </p>
                 <ul className="space-y-1.5">
@@ -215,13 +215,13 @@ export default function Home() {
                 icon: Users,
                 title: 'Client Persona Scripts',
                 description:
-                  'Tailored talking points for 5 client types — the anxious investor, the first-time SIP buyer, the market timer, the retiree, and the HNI. Know what to say to each.',
+                  'Tailored talking points for 3 client personas — The Panicking Client, The SIP Investor, and The New Prospect. Know what to say to each.',
               },
               {
                 icon: Target,
-                title: 'Goal-Based Conversations',
+                title: 'AI Fund Finder',
                 description:
-                  'Close more SIPs with the goal planner. Input their target, show the monthly SIP needed, and recommend the right HDFC fund — all in under 2 minutes.',
+                  'Answer 6 quick risk questions and get a SEBI-compliant HDFC fund basket matched to the client profile. Built on 6 risk levels from Conservative to Very Aggressive.',
               },
             ].map((item) => (
               <div

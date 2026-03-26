@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'HDFC MFD Hub — Tools for HDFC Mutual Fund Distributors',
     description:
-      'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools.',
+      'AI-powered platform for HDFC Mutual Fund distributors. Monday Morning Brief, fund performance dashboard, AI fund finder, and market news insights.',
     images: ['/og-default.png'],
   },
 };
@@ -84,7 +84,7 @@ const jsonLd = {
       applicationCategory: 'FinanceApplication',
       operatingSystem: 'Web',
       description:
-        'AI-powered platform for HDFC Mutual Fund distributors providing Monday Morning Brief, fund performance dashboard, SIP planner, and client conversation tools.',
+        'AI-powered platform for HDFC Mutual Fund distributors providing Monday Morning Brief, fund performance dashboard, AI fund finder, and market news insights.',
       offers: {
         '@type': 'Offer',
         price: '0',
@@ -93,8 +93,6 @@ const jsonLd = {
       featureList: [
         'Monday Morning Brief for MFDs',
         'Fund Performance Dashboard with heatmap',
-        'SIP Goal Planner',
-        'Capital Gains Tax Calculator',
         'AI-powered fund recommendations',
         'Market news analysis',
       ],
