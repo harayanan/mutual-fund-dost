@@ -9,19 +9,19 @@ export async function analyzeNewsForInvestors(newsItems: { title: string; summar
     .map((n, i) => `${i + 1}. [${n.source}] ${n.title}\n   ${n.summary}`)
     .join('\n\n');
 
-  const prompt = `You are "Mutual Fund Dost", an expert Indian mutual fund advisor focused exclusively on XYZ Mutual Fund schemes. Analyze the following news items and provide deep, valuable investment insights.
+  const prompt = `You are "Mutual Fund Dost", an expert Indian mutual fund advisor focused exclusively on HDFC Mutual Fund schemes. Analyze the following news items and provide deep, valuable investment insights.
 
 For each news item:
 1. Classify the news: macro / geopolitical / company / sector / regulatory / market
-2. Rate relevance to XYZ mutual fund investors on a scale of 1-10 (10 = directly impacts XYZ fund NAVs, 1 = completely unrelated)
+2. Rate relevance to HDFC mutual fund investors on a scale of 1-10 (10 = directly impacts HDFC fund NAVs, 1 = completely unrelated)
 3. If relevance_score < 4, set "skip": true (generic market noise not worth showing to investors)
 4. Assess the impact on Indian mutual fund investors: positive / negative / neutral
-5. Identify which XYZ Mutual Fund schemes are most likely affected (use exact fund names)
-6. Provide a RICH, DETAILED insight paragraph (4-5 sentences). Cover: what exactly happened, why it matters for mutual fund investors, how it connects to specific funds in the XYZ universe, and what investors should watch for next.
+5. Identify which HDFC Mutual Fund schemes are most likely affected (use exact fund names)
+6. Provide a RICH, DETAILED insight paragraph (4-5 sentences). Cover: what exactly happened, why it matters for mutual fund investors, how it connects to specific funds in the HDFC universe, and what investors should watch for next.
 7. Provide a SPECIFIC investor_action — not generic advice like "stay invested" but concrete next steps. Example: "SIP investors in HDFC Infrastructure Fund may see short-term NAV pressure; continue SIPs to average down. New lump-sum investors should wait for clarity on Q3 earnings before adding exposure."
 8. Rate the significance: high / medium / low
 
-XYZ Fund Universe:
+HDFC Fund Universe:
 - Equity: Flexi Cap, Mid Cap, Small Cap, Large Cap, Large and Mid Cap, Focused, Multi Cap, Capital Builder Value, Dividend Yield, ELSS Tax Saver
 - Sectoral/Thematic: Infrastructure, Technology, Pharma & Healthcare, Banking & Financial Services, Defence, Housing Opportunities, Manufacturing, Business Cycle
 - Hybrid: Balanced Advantage, Hybrid Equity, Equity Savings, Hybrid Debt, Multi-Asset Allocation, Arbitrage
@@ -35,7 +35,7 @@ Important guidelines:
 - Focus on long-term wealth creation perspective
 - Consider the investor's risk profile when suggesting impact
 - Be balanced and factual, avoid sensationalism
-- Skip articles that are generic market commentary, clickbait, or have no actionable relevance to XYZ fund investors
+- Skip articles that are generic market commentary, clickbait, or have no actionable relevance to HDFC fund investors
 
 NEWS ITEMS:
 ${newsText}
@@ -113,7 +113,9 @@ export interface WeeklyStory {
   category: string;
   urgency: 'high' | 'medium' | 'low';
   clientImplication: string;
+  clientImplication_hi?: string;
   talkingPoints: string[];
+  talkingPoints_hi?: string[];
   affectedClientSegments: string[];
 }
 
@@ -128,8 +130,11 @@ export interface ClientActionItem {
 export interface ConversationScript {
   persona: string;
   opener: string;
+  opener_hi?: string;
   talkingPoints: string[];
+  talkingPoints_hi?: string[];
   objectionHandler: string;
+  objectionHandler_hi?: string;
   suggestedFund: string;
 }
 
@@ -167,17 +172,21 @@ export interface MondayBrief {
   marketPulse: MarketMetric[];
   niftyWeekSummary: string;
   bigPicture: string;
+  bigPicture_hi?: string;
   topStories: WeeklyStory[];
   // Page 2
   actionPlan: ClientActionItem[];
   conversationScripts: ConversationScript[];
   sipWinsStat: string;
+  sipWinsStat_hi?: string;
   // Page 3
   fundSpotlights: FundSpotlight[];
   fundHeatmap: FundHeatmapRow[];
   weekAhead: WeekAheadEvent[];
   regulatoryCorner: string;
+  regulatoryCorner_hi?: string;
   weeklyWisdom: string;
+  weeklyWisdom_hi?: string;
 }
 
 export async function generateDistributorBrief(
@@ -226,7 +235,7 @@ Create a comprehensive daily brief with:
 
 4. DAILY WISDOM: One motivational or educational quote/tip for distributors (1-2 sentences)
 
-XYZ Fund Universe (for context):
+HDFC Fund Universe (for context):
 - Equity: Flexi Cap, Mid Cap, Small Cap, Large Cap, Large and Mid Cap, Focused, Multi Cap, Capital Builder Value, Dividend Yield, ELSS Tax Saver
 - Sectoral/Thematic: Infrastructure, Technology, Pharma & Healthcare, Banking & Financial Services, Defence, Housing Opportunities, Manufacturing, Business Cycle
 - Hybrid: Balanced Advantage, Hybrid Equity, Equity Savings, Hybrid Debt, Multi-Asset Allocation, Arbitrage
@@ -296,7 +305,7 @@ Week of: ${weekOf}
 LAST WEEK'S NEWS (use these for analysis):
 ${newsText}
 
-XYZ FUND PERFORMANCE DATA:
+HDFC FUND PERFORMANCE DATA:
 ${fundText}
 
 Generate a comprehensive Monday Morning Brief. This document will be printed as a 3-page PDF and sent to distributors. Make it data-rich, actionable, and impressive.
@@ -305,7 +314,7 @@ IMPORTANT RULES:
 - All data must be based on the news and fund data provided above
 - Frame everything for DISTRIBUTORS (how to serve clients), not retail investors
 - Be specific with numbers — distributors respect precision
-- XYZ Flexi Cap Fund and XYZ Balanced Advantage Fund are the flagship funds — give them hero treatment
+- HDFC Flexi Cap Fund and HDFC Balanced Advantage Fund are the flagship funds — give them hero treatment
 - Never give specific investment advice — frame as conversation starters
 - Include SEBI compliance language where needed
 
@@ -322,15 +331,17 @@ Return a JSON object with this EXACT structure:
     {"label": "DII Flow (₹ Cr)", "value": "+9,800", "change": "", "direction": "up"}
   ],
   "niftyWeekSummary": "Brief 1-line describing the week's Nifty trajectory shape (e.g., 'Steady decline all week with Friday selloff')",
-  "bigPicture": "3-4 paragraph narrative summary of the week. Written like a senior analyst briefing — what happened, why, what it means for mutual fund distributors and their clients. Include specific numbers. This is what the distributor reads before any client call on Monday.",
+  "bigPicture": "2 short paragraphs, max 100 words total. Written like a senior colleague briefing an MFD distributor before their Monday calls — concrete, numbers-driven, no padding.",
   "topStories": [
     {
       "title": "Headline",
       "source": "Source",
       "category": "macro|sector|regulatory|market|geopolitical|company",
       "urgency": "high|medium|low",
-      "clientImplication": "2-3 sentences on what this means for clients",
+      "clientImplication": "1 sentence, max 20 words",
+      "clientImplication_hi": "Hindi translation of clientImplication in Devanagari script",
       "talkingPoints": ["point1", "point2"],
+      "talkingPoints_hi": ["Hindi point 1 in Devanagari", "Hindi point 2 in Devanagari"],
       "affectedClientSegments": ["retirees", "HNI clients", "SIP investors"]
     }
   ],
@@ -347,43 +358,39 @@ Return a JSON object with this EXACT structure:
     {
       "persona": "The Panicking Client",
       "opener": "Natural opening line to use",
+      "opener_hi": "Hindi opener in Devanagari script",
       "talkingPoints": ["point1", "point2", "point3"],
+      "talkingPoints_hi": ["Hindi point 1 in Devanagari", "Hindi point 2 in Devanagari", "Hindi point 3 in Devanagari"],
       "objectionHandler": "When they say 'but the market is crashing...' respond with...",
-      "suggestedFund": "XYZ fund to mention in context"
-    },
-    {
-      "persona": "The Opportunity Seeker",
-      "opener": "...",
-      "talkingPoints": ["..."],
-      "objectionHandler": "...",
-      "suggestedFund": "..."
+      "objectionHandler_hi": "Hindi objection handler in Devanagari script",
+      "suggestedFund": "HDFC fund to mention in context"
     },
     {
       "persona": "The SIP Investor",
       "opener": "...",
+      "opener_hi": "...",
       "talkingPoints": ["..."],
+      "talkingPoints_hi": ["..."],
       "objectionHandler": "...",
-      "suggestedFund": "..."
-    },
-    {
-      "persona": "The HNI Client",
-      "opener": "...",
-      "talkingPoints": ["..."],
-      "objectionHandler": "...",
+      "objectionHandler_hi": "...",
       "suggestedFund": "..."
     },
     {
       "persona": "The New Prospect",
       "opener": "...",
+      "opener_hi": "...",
       "talkingPoints": ["..."],
+      "talkingPoints_hi": ["..."],
       "objectionHandler": "...",
+      "objectionHandler_hi": "...",
       "suggestedFund": "..."
     }
   ],
-  "sipWinsStat": "A powerful stat like: 'A client who started a ₹10,000 SIP in XYZ Flexi Cap Fund during the March 2020 crash now has ₹X.XX lakhs (XX% XIRR). Markets recover — SIPs make sure your clients are there when they do.'",
+  "sipWinsStat": "A powerful stat like: 'A client who started a ₹10,000 SIP in HDFC Flexi Cap Fund during the March 2020 crash now has ₹X.XX lakhs (XX% XIRR). Markets recover — SIPs make sure your clients are there when they do.'",
+  "sipWinsStat_hi": "Hindi translation of sipWinsStat in Devanagari script",
   "fundSpotlights": [
     {
-      "fundName": "XYZ Flexi Cap Fund",
+      "fundName": "HDFC Flexi Cap Fund",
       "aum": "₹96,295 Cr",
       "return1Y": "17.2%",
       "return3Y": "22.9%",
@@ -394,7 +401,7 @@ Return a JSON object with this EXACT structure:
       "sipStory": "₹1 lakh invested 10 years ago is now ₹X.XX lakhs"
     },
     {
-      "fundName": "XYZ Balanced Advantage Fund",
+      "fundName": "HDFC Balanced Advantage Fund",
       "aum": "...",
       "return1Y": "...",
       "return3Y": "...",
@@ -423,10 +430,17 @@ Return a JSON object with this EXACT structure:
     }
   ],
   "regulatoryCorner": "Any SEBI/AMFI updates, NFO launches, scheme changes, or tax-related deadlines. If nothing notable, say 'No major regulatory updates this week.'",
-  "weeklyWisdom": "One motivational or educational quote relevant to the week's context"
+  "regulatoryCorner_hi": "Hindi translation of regulatoryCorner in Devanagari script",
+  "weeklyWisdom": "One motivational or educational quote relevant to the week's context",
+  "weeklyWisdom_hi": "Hindi translation of weeklyWisdom in Devanagari script",
+  "bigPicture_hi": "Hindi translation of bigPicture in Devanagari script"
 }
 
-CRITICAL: Use actual numbers from the fund data provided. For market data (Nifty, Sensex, VIX, Gold, FII/DII flows), estimate from the news context — distributors expect approximate accuracy, not perfection. For fund returns, use the EXACT numbers from the fund data above.`;
+Include exactly 3 top stories (no more, no fewer). Include exactly 3 action items. Include exactly 3 conversation scripts (The Panicking Client, The SIP Investor, The New Prospect only).
+
+For all _hi fields: write natural, conversational Hindi in Devanagari script. This is NOT a word-for-word translation — adapt for a distributor reading on their phone in a Tier 2 city. Use clear, simple Hindi. Avoid Anglicized jargon where Hindi equivalents exist: बाज़ार (market), निवेश (investment), ग्राहक (client), रिटर्न (return — keep this one), एसआईपी (SIP — keep this one).
+
+CRITICAL: Use actual numbers from the fund data provided. For fund returns, use the EXACT numbers from the fund data above. For marketPulse data (Nifty, Sensex, VIX, Gold, FII/DII flows): only populate values you can DIRECTLY derive from the news items provided. If a metric is not mentioned in the news, set value to "N/A" and change to "". Do NOT estimate, extrapolate, or guess market index levels — this is displayed to professional distributors who will spot fabricated data.`;
 
   const result = await geminiModel.generateContent(prompt);
   const text = result.response.text();
@@ -444,15 +458,19 @@ CRITICAL: Use actual numbers from the fund data provided. For market data (Nifty
     marketPulse: parsed.marketPulse || [],
     niftyWeekSummary: parsed.niftyWeekSummary || '',
     bigPicture: parsed.bigPicture || '',
+    bigPicture_hi: parsed.bigPicture_hi,
     topStories: parsed.topStories || [],
     actionPlan: parsed.actionPlan || [],
     conversationScripts: parsed.conversationScripts || [],
     sipWinsStat: parsed.sipWinsStat || '',
+    sipWinsStat_hi: parsed.sipWinsStat_hi,
     fundSpotlights: parsed.fundSpotlights || [],
     fundHeatmap: parsed.fundHeatmap || [],
     weekAhead: parsed.weekAhead || [],
     regulatoryCorner: parsed.regulatoryCorner || '',
+    regulatoryCorner_hi: parsed.regulatoryCorner_hi,
     weeklyWisdom: parsed.weeklyWisdom || '',
+    weeklyWisdom_hi: parsed.weeklyWisdom_hi,
   };
 }
 

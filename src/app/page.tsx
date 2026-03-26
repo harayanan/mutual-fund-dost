@@ -4,12 +4,12 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'HDFC MFD Hub — AI Tools for HDFC Mutual Fund Distributors',
   description:
-    'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund screener, SIP planner, capital gains calculator, and trail commission estimator.',
+    'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund screener, and AI news insights.',
   alternates: { canonical: '/' },
   openGraph: {
     title: 'HDFC MFD Hub — AI Tools for HDFC Mutual Fund Distributors',
     description:
-      'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund screener, SIP planner, capital gains calculator, and trail commission estimator.',
+      'Win every client conversation with AI-powered tools built for HDFC MFDs. Monday Morning Brief, fund screener, and AI news insights.',
     url: '/',
   },
 };
@@ -65,13 +65,6 @@ export default function Home() {
               >
                 <BarChart3 className="w-5 h-5" />
                 Fund Dashboard
-              </Link>
-              <Link
-                href="/planner"
-                className="inline-flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white font-medium px-8 py-4 rounded-xl hover:bg-white/20 transition-colors text-lg"
-              >
-                <Target className="w-5 h-5" />
-                Client Planner
               </Link>
             </div>
           </div>
@@ -141,63 +134,6 @@ export default function Home() {
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
                       <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Link>
-
-            {/* Client Planner */}
-            <Link href="/planner" className="group">
-              <div className="bg-gradient-to-br from-slate-50 to-emerald-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-emerald-300">
-                <div className="w-12 h-12 bg-emerald-600 rounded-xl flex items-center justify-center mb-4">
-                  <Target className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Client SIP Planner
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                  Goal-based SIP calculator with WhatsApp-shareable output.
-                  Show clients exactly what SIP they need to reach their goal,
-                  with HDFC fund recommendations.
-                </p>
-                <ul className="space-y-1.5">
-                  {[
-                    'Goal → SIP calculator',
-                    'WhatsApp-ready output',
-                    'HDFC fund suggestions',
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
-                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Link>
-
-            {/* Commission Estimator */}
-            <Link href="/commission-estimator" className="group">
-              <div className="bg-gradient-to-br from-slate-50 to-purple-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-purple-300">
-                <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
-                  <TrendingUp className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Trail Commission Estimator
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                  Model your annual trail income from your HDFC AUM. Enter AUM by category,
-                  see current income, and project 10-year growth with SIP additions.
-                </p>
-                <ul className="space-y-1.5">
-                  {[
-                    'Blended trail rate by category',
-                    '10-year income projection',
-                    'SIP growth scenario model',
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
-                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full" />
                       {item}
                     </li>
                   ))}

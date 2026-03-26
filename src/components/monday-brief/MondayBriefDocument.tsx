@@ -402,7 +402,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
             {t.bigPicture}
           </h2>
           <div className="space-y-3">
-            {brief.bigPicture.split('\n\n').map((para: string, idx: number) => (
+            {(lang === 'hi' && brief.bigPicture_hi ? brief.bigPicture_hi : brief.bigPicture).split('\n\n').map((para: string, idx: number) => (
               <p key={idx} className="text-sm text-gray-800 leading-relaxed">
                 {para}
               </p>
@@ -431,11 +431,11 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                 </div>
                 <h3 className="text-sm font-bold text-gray-900 mb-1">{story.title}</h3>
                 <p className="text-xs text-gray-600 leading-relaxed mb-2">
-                  {story.clientImplication}
+                  {lang === 'hi' && story.clientImplication_hi ? story.clientImplication_hi : story.clientImplication}
                 </p>
                 {story.talkingPoints && story.talkingPoints.length > 0 && (
                   <ul className="list-disc list-inside space-y-0.5 mb-2">
-                    {story.talkingPoints.map((pt: string, j: number) => (
+                    {(lang === 'hi' && story.talkingPoints_hi?.length ? story.talkingPoints_hi : story.talkingPoints).map((pt: string, j: number) => (
                       <li key={j} className="text-xs text-gray-700">
                         {pt}
                       </li>
@@ -522,7 +522,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
             {t.sipWins}
           </p>
           <p className="text-sm text-amber-900 font-semibold leading-relaxed">
-            {brief.sipWinsStat}
+            {lang === 'hi' && brief.sipWinsStat_hi ? brief.sipWinsStat_hi : brief.sipWinsStat}
           </p>
         </div>
       )}
@@ -544,11 +544,11 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                 </div>
                 <div className="px-3 py-2.5 space-y-2">
                   <p className="text-xs text-gray-700 italic">
-                    &ldquo;{script.opener}&rdquo;
+                    &ldquo;{lang === 'hi' && script.opener_hi ? script.opener_hi : script.opener}&rdquo;
                   </p>
                   {script.talkingPoints && script.talkingPoints.length > 0 && (
                     <ol className="list-decimal list-inside space-y-0.5">
-                      {script.talkingPoints.map((pt: string, j: number) => (
+                      {(lang === 'hi' && script.talkingPoints_hi?.length ? script.talkingPoints_hi : script.talkingPoints).map((pt: string, j: number) => (
                         <li key={j} className="text-xs text-gray-700">
                           {pt}
                         </li>
@@ -560,7 +560,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
                       <p className="text-[10px] font-semibold text-amber-700 mb-0.5">
                         {t.whenTheySay}
                       </p>
-                      <p className="text-xs text-amber-800">{script.objectionHandler}</p>
+                      <p className="text-xs text-amber-800">{lang === 'hi' && script.objectionHandler_hi ? script.objectionHandler_hi : script.objectionHandler}</p>
                     </div>
                   )}
                   {script.suggestedFund && (
@@ -781,7 +781,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
           </div>
           <div className="px-4 py-3">
             <p className="text-xs text-gray-700 leading-relaxed">
-              {brief.regulatoryCorner || t.noRegulatory}
+              {lang === 'hi' && brief.regulatoryCorner_hi ? brief.regulatoryCorner_hi : (brief.regulatoryCorner || t.noRegulatory)}
             </p>
           </div>
         </div>
@@ -793,7 +793,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
         {brief.weeklyWisdom && (
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-3 border-b border-gray-200">
             <p className="text-xs text-blue-800 italic text-center leading-relaxed">
-              &ldquo;{brief.weeklyWisdom}&rdquo;
+              &ldquo;{lang === 'hi' && brief.weeklyWisdom_hi ? brief.weeklyWisdom_hi : brief.weeklyWisdom}&rdquo;
             </p>
           </div>
         )}
