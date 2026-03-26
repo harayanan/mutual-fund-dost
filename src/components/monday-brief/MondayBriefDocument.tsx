@@ -13,6 +13,104 @@ import type {
   WeekAheadEvent,
 } from '@/lib/gemini';
 
+// ─── Translations ────────────────────────────────────────────────────────────
+
+const en = {
+  title: 'Monday Morning Brief',
+  weekOf: 'Week of',
+  brandName: 'Mutual Fund Dost',
+  marketPulse: 'Market Pulse',
+  bigPicture: 'The Big Picture',
+  topStories: 'Top Stories',
+  actionPlanTitle: 'Your Action Plan This Week',
+  priority: 'Priority',
+  task: 'Task',
+  clientSegment: 'Client Segment',
+  timing: 'Timing',
+  context: 'Context',
+  sipWins: 'SIP Wins — Your Ammunition',
+  conversationPlaybook: 'Conversation Playbook',
+  starPerformers: 'Star Performers',
+  heatmapTitle: 'Fund Performance Heatmap',
+  category: 'Category',
+  week1: '1 Week',
+  month1: '1 Month',
+  months3: '3 Months',
+  year1: '1 Year',
+  weekAhead: 'Week Ahead Radar',
+  regulatoryCorner: 'Regulatory Corner',
+  noRegulatory: 'No major regulatory updates this week.',
+  return1Y: '1Y Return',
+  return3Y: '3Y Return',
+  return5Y: '5Y Return',
+  whyThisWeek: 'Why This Week',
+  elevatorPitch: 'Elevator Pitch',
+  sipStory: 'SIP Story',
+  whenTheySay: 'When they say...',
+  callToday: 'Call Today',
+  thisWeek: 'This Week',
+  fyi: 'FYI',
+  high: 'High',
+  medium: 'Medium',
+  low: 'Low',
+  generated: 'Generated:',
+  refresh: 'Refresh',
+  refreshing: 'Refreshing...',
+  loadingText: 'Loading your Monday Morning Brief...',
+  generateBrief: 'Generate Monday Brief',
+  generating: 'Generating...',
+  staleWarning: (weekOf: string) =>
+    `This brief is from a previous week (Week of ${weekOf}). Click refresh to generate this week's brief.`,
+};
+
+const hi: typeof en = {
+  title: 'सोमवार की सुबह का ब्रीफ',
+  weekOf: 'सप्ताह:',
+  brandName: 'म्यूचुअल फंड दोस्त',
+  marketPulse: 'बाज़ार की धड़कन',
+  bigPicture: 'बड़ी तस्वीर',
+  topStories: 'मुख्य खबरें',
+  actionPlanTitle: 'इस सप्ताह आपकी कार्य योजना',
+  priority: 'प्राथमिकता',
+  task: 'कार्य',
+  clientSegment: 'ग्राहक वर्ग',
+  timing: 'समय',
+  context: 'संदर्भ',
+  sipWins: 'SIP की सफलता — आपका हथियार',
+  conversationPlaybook: 'बातचीत की पुस्तिका',
+  starPerformers: 'स्टार प्रदर्शनकर्ता',
+  heatmapTitle: 'फंड प्रदर्शन हीटमैप',
+  category: 'श्रेणी',
+  week1: '1 सप्ताह',
+  month1: '1 महीना',
+  months3: '3 महीने',
+  year1: '1 साल',
+  weekAhead: 'आने वाले सप्ताह का रडार',
+  regulatoryCorner: 'नियामक कोना',
+  noRegulatory: 'इस सप्ताह कोई बड़ा नियामक अपडेट नहीं।',
+  return1Y: '1 वर्ष रिटर्न',
+  return3Y: '3 वर्ष रिटर्न',
+  return5Y: '5 वर्ष रिटर्न',
+  whyThisWeek: 'इस सप्ताह क्यों',
+  elevatorPitch: 'एलिवेटर पिच',
+  sipStory: 'SIP कहानी',
+  whenTheySay: 'जब वे कहते हैं...',
+  callToday: 'आज कॉल करें',
+  thisWeek: 'इस सप्ताह',
+  fyi: 'जानकारी',
+  high: 'उच्च',
+  medium: 'मध्यम',
+  low: 'कम',
+  generated: 'तैयार:',
+  refresh: 'रिफ्रेश',
+  refreshing: 'रिफ्रेश हो रहा है...',
+  loadingText: 'आपका ब्रीफ लोड हो रहा है...',
+  generateBrief: 'ब्रीफ तैयार करें',
+  generating: 'तैयार हो रहा है...',
+  staleWarning: (weekOf: string) =>
+    `यह ब्रीफ पिछले सप्ताह का है (सप्ताह: ${weekOf})। इस सप्ताह का ब्रीफ बनाने के लिए रिफ्रेश करें।`,
+};
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function dirColor(direction: MarketMetric['direction']) {
@@ -27,42 +125,42 @@ function dirBg(direction: MarketMetric['direction']) {
   return 'bg-gray-50';
 }
 
-function urgencyBadge(urgency: 'high' | 'medium' | 'low') {
+function urgencyBadge(urgency: 'high' | 'medium' | 'low', t: typeof en) {
   if (urgency === 'high')
     return (
       <span className="inline-block text-[10px] font-bold uppercase tracking-wide bg-red-100 text-red-700 px-2 py-0.5 rounded">
-        Call Today
+        {t.callToday}
       </span>
     );
   if (urgency === 'medium')
     return (
       <span className="inline-block text-[10px] font-bold uppercase tracking-wide bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
-        This Week
+        {t.thisWeek}
       </span>
     );
   return (
     <span className="inline-block text-[10px] font-bold uppercase tracking-wide bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-      FYI
+      {t.fyi}
     </span>
   );
 }
 
-function priorityBadge(priority: 'high' | 'medium' | 'low') {
+function priorityBadge(priority: 'high' | 'medium' | 'low', t: typeof en) {
   if (priority === 'high')
     return (
       <span className="inline-block text-[10px] font-bold uppercase bg-red-100 text-red-700 px-2 py-0.5 rounded">
-        High
+        {t.high}
       </span>
     );
   if (priority === 'medium')
     return (
       <span className="inline-block text-[10px] font-bold uppercase bg-amber-100 text-amber-700 px-2 py-0.5 rounded">
-        Medium
+        {t.medium}
       </span>
     );
   return (
     <span className="inline-block text-[10px] font-bold uppercase bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
-      Low
+      {t.low}
     </span>
   );
 }
@@ -95,7 +193,8 @@ function formatWeekRange(weekOf: string): string {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function MondayBriefDocument() {
+export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi' }) {
+  const t = lang === 'hi' ? hi : en;
   const [brief, setBrief] = useState<MondayBrief | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -168,7 +267,7 @@ export default function MondayBriefDocument() {
             </div>
           ))}
         </div>
-        <p className="text-center text-sm text-gray-500">Loading your Monday Morning Brief...</p>
+        <p className="text-center text-sm text-gray-500">{t.loadingText}</p>
       </div>
     );
   }
@@ -183,10 +282,10 @@ export default function MondayBriefDocument() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium disabled:opacity-50"
+          className="inline-flex items-center gap-2 bg-[#e31e24] text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-          {refreshing ? 'Generating...' : 'Generate Monday Brief'}
+          {refreshing ? t.generating : t.generateBrief}
         </button>
       </div>
     );
@@ -201,10 +300,10 @@ export default function MondayBriefDocument() {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium disabled:opacity-50"
+          className="inline-flex items-center gap-2 bg-[#e31e24] text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
-          {refreshing ? 'Generating...' : 'Generate Monday Brief'}
+          {refreshing ? t.generating : t.generateBrief}
         </button>
       </div>
     );
@@ -219,20 +318,17 @@ export default function MondayBriefDocument() {
       {isStale && (
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6 flex items-center gap-3 no-print">
           <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0" />
-          <p className="text-sm text-amber-700">
-            This brief is from a previous week (Week of {brief.weekOf}). Click refresh to generate
-            this week&apos;s brief.
-          </p>
+          <p className="text-sm text-amber-700">{t.staleWarning(brief.weekOf)}</p>
         </div>
       )}
 
       {/* Controls */}
       <div className="flex items-center justify-between mb-6 no-print">
-        <div className="text-sm text-gray-600">Week of {weekRange}</div>
+        <div className="text-sm text-gray-600">{t.weekOf} {weekRange}</div>
         <div className="flex items-center gap-3">
           {lastUpdated && (
             <span className="text-xs text-gray-400">
-              Generated:{' '}
+              {t.generated}{' '}
               {new Date(lastUpdated).toLocaleString('en-IN', {
                 day: 'numeric',
                 month: 'short',
@@ -244,10 +340,10 @@ export default function MondayBriefDocument() {
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 text-xs text-[#e31e24] hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
-            {refreshing ? 'Refreshing...' : 'Refresh'}
+            {refreshing ? t.refreshing : t.refresh}
           </button>
         </div>
       </div>
@@ -257,22 +353,22 @@ export default function MondayBriefDocument() {
          ═══════════════════════════════════════════════════════════════════ */}
 
       {/* Document Header */}
-      <div className="bg-blue-600 text-white rounded-t-xl px-6 py-4 mb-0">
+      <div className="bg-[#e31e24] text-white rounded-t-xl px-6 py-4 mb-0">
         <h1 className="text-lg sm:text-xl font-bold tracking-wide uppercase">
-          Monday Morning Brief
+          {t.title}
         </h1>
         <div className="flex items-center justify-between mt-1">
-          <p className="text-blue-100 text-xs sm:text-sm">Week of {weekRange}</p>
-          <p className="text-blue-200 text-xs font-medium">Mutual Fund Dost</p>
+          <p className="text-red-100 text-xs sm:text-sm">{t.weekOf} {weekRange}</p>
+          <p className="text-red-200 text-xs font-medium">{t.brandName}</p>
         </div>
       </div>
 
       {/* Market Pulse Strip */}
       <div className="bg-white border border-t-0 border-gray-200 px-4 py-3">
         <p className="text-[10px] uppercase tracking-wide text-gray-500 font-semibold mb-2">
-          Market Pulse
+          {t.marketPulse}
         </p>
-        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+        <div className="market-pulse-grid grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2">
           {(brief.marketPulse || []).map((m: MarketMetric, idx: number) => (
             <div
               key={idx}
@@ -302,8 +398,8 @@ export default function MondayBriefDocument() {
       {/* The Big Picture */}
       {brief.bigPicture && (
         <div className="bg-white border border-t-0 border-gray-200 px-6 py-4">
-          <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wide mb-3">
-            The Big Picture
+          <h2 className="text-sm font-bold text-[#e31e24] uppercase tracking-wide mb-3">
+            {t.bigPicture}
           </h2>
           <div className="space-y-3">
             {brief.bigPicture.split('\n\n').map((para: string, idx: number) => (
@@ -318,8 +414,8 @@ export default function MondayBriefDocument() {
       {/* Top Stories */}
       {brief.topStories && brief.topStories.length > 0 && (
         <div className="bg-white border border-t-0 border-gray-200 rounded-b-xl px-6 py-4">
-          <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wide mb-3">
-            Top Stories
+          <h2 className="text-sm font-bold text-[#e31e24] uppercase tracking-wide mb-3">
+            {t.topStories}
           </h2>
           <div className="space-y-3">
             {brief.topStories.map((story: WeeklyStory, idx: number) => (
@@ -328,7 +424,7 @@ export default function MondayBriefDocument() {
                 className="border border-gray-100 rounded-lg p-3 bg-white"
               >
                 <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                  {urgencyBadge(story.urgency)}
+                  {urgencyBadge(story.urgency, t)}
                   <span className="text-[9px] uppercase tracking-wide bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-medium">
                     {story.category}
                   </span>
@@ -372,9 +468,9 @@ export default function MondayBriefDocument() {
          ═══════════════════════════════════════════════════════════════════ */}
 
       {/* Section header */}
-      <div className="bg-blue-600 text-white rounded-t-xl px-6 py-3">
+      <div className="bg-[#e31e24] text-white rounded-t-xl px-6 py-3">
         <h2 className="text-base font-bold uppercase tracking-wide">
-          Your Action Plan This Week
+          {t.actionPlanTitle}
         </h2>
       </div>
 
@@ -385,19 +481,19 @@ export default function MondayBriefDocument() {
             <thead>
               <tr className="border-b-2 border-gray-200">
                 <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                  Priority
+                  {t.priority}
                 </th>
                 <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                  Task
+                  {t.task}
                 </th>
                 <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                  Client Segment
+                  {t.clientSegment}
                 </th>
                 <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                  Timing
+                  {t.timing}
                 </th>
                 <th className="text-left py-2 px-2 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                  Context
+                  {t.context}
                 </th>
               </tr>
             </thead>
@@ -407,7 +503,7 @@ export default function MondayBriefDocument() {
                   key={idx}
                   className={`border-b border-gray-100 ${idx % 2 === 1 ? 'bg-gray-50' : ''}`}
                 >
-                  <td className="py-2 px-2">{priorityBadge(item.priority)}</td>
+                  <td className="py-2 px-2">{priorityBadge(item.priority, t)}</td>
                   <td className="py-2 px-2 font-medium text-gray-900">{item.task}</td>
                   <td className="py-2 px-2 text-gray-600">{item.clientSegment}</td>
                   <td className="py-2 px-2 text-gray-600">{item.timing}</td>
@@ -423,7 +519,7 @@ export default function MondayBriefDocument() {
       {brief.sipWinsStat && (
         <div className="border border-t-0 border-gray-200 px-6 py-4 bg-gradient-to-r from-amber-50 to-orange-50">
           <p className="text-[10px] uppercase tracking-wide text-amber-700 font-bold mb-1.5">
-            SIP Wins — Your Ammunition
+            {t.sipWins}
           </p>
           <p className="text-sm text-amber-900 font-semibold leading-relaxed">
             {brief.sipWinsStat}
@@ -434,8 +530,8 @@ export default function MondayBriefDocument() {
       {/* Conversation Playbook */}
       {brief.conversationScripts && brief.conversationScripts.length > 0 && (
         <div className="bg-white border border-t-0 border-gray-200 rounded-b-xl px-6 py-4">
-          <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wide mb-3">
-            Conversation Playbook
+          <h2 className="text-sm font-bold text-[#e31e24] uppercase tracking-wide mb-3">
+            {t.conversationPlaybook}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {brief.conversationScripts.map((script: ConversationScript, idx: number) => (
@@ -462,7 +558,7 @@ export default function MondayBriefDocument() {
                   {script.objectionHandler && (
                     <div className="bg-amber-50 rounded px-2.5 py-2 mt-1.5">
                       <p className="text-[10px] font-semibold text-amber-700 mb-0.5">
-                        When they say...
+                        {t.whenTheySay}
                       </p>
                       <p className="text-xs text-amber-800">{script.objectionHandler}</p>
                     </div>
@@ -491,9 +587,9 @@ export default function MondayBriefDocument() {
       {/* Star Performers */}
       {brief.fundSpotlights && brief.fundSpotlights.length > 0 && (
         <div className="mb-4">
-          <div className="bg-blue-600 text-white rounded-t-xl px-6 py-3">
+          <div className="bg-[#e31e24] text-white rounded-t-xl px-6 py-3">
             <h2 className="text-base font-bold uppercase tracking-wide">
-              Star Performers
+              {t.starPerformers}
             </h2>
           </div>
           <div className="bg-white border border-t-0 border-gray-200 rounded-b-xl px-4 py-4">
@@ -514,13 +610,13 @@ export default function MondayBriefDocument() {
                         <thead>
                           <tr className="border-b border-gray-100">
                             <th className="text-left py-1 text-[10px] text-gray-400 font-medium">
-                              1Y Return
+                              {t.return1Y}
                             </th>
                             <th className="text-left py-1 text-[10px] text-gray-400 font-medium">
-                              3Y Return
+                              {t.return3Y}
                             </th>
                             <th className="text-left py-1 text-[10px] text-gray-400 font-medium">
-                              5Y Return
+                              {t.return5Y}
                             </th>
                           </tr>
                         </thead>
@@ -539,7 +635,7 @@ export default function MondayBriefDocument() {
                     {fund.whyThisWeek && (
                       <div>
                         <p className="text-[10px] font-semibold text-gray-500 uppercase mb-0.5">
-                          Why This Week
+                          {t.whyThisWeek}
                         </p>
                         <p className="text-xs text-gray-700 leading-relaxed">
                           {fund.whyThisWeek}
@@ -549,7 +645,7 @@ export default function MondayBriefDocument() {
                     {fund.elevatorPitch && (
                       <div className="bg-blue-50 border-l-2 border-blue-400 px-3 py-2 rounded-r">
                         <p className="text-[10px] font-semibold text-blue-600 mb-0.5">
-                          Elevator Pitch
+                          {t.elevatorPitch}
                         </p>
                         <p className="text-xs text-blue-800 leading-relaxed">
                           {fund.elevatorPitch}
@@ -559,7 +655,7 @@ export default function MondayBriefDocument() {
                     {fund.sipStory && (
                       <div className="bg-green-50 border-l-2 border-green-400 px-3 py-2 rounded-r">
                         <p className="text-[10px] font-semibold text-green-600 mb-0.5">
-                          SIP Story
+                          {t.sipStory}
                         </p>
                         <p className="text-xs text-green-800 leading-relaxed">{fund.sipStory}</p>
                       </div>
@@ -577,8 +673,8 @@ export default function MondayBriefDocument() {
         <div className="mb-4">
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div className="px-4 py-3 border-b border-gray-100">
-              <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wide">
-                Fund Performance Heatmap
+              <h2 className="text-sm font-bold text-[#e31e24] uppercase tracking-wide">
+                {t.heatmapTitle}
               </h2>
             </div>
             <div className="overflow-x-auto">
@@ -586,19 +682,19 @@ export default function MondayBriefDocument() {
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
                     <th className="text-left py-2 px-3 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                      Category
+                      {t.category}
                     </th>
                     <th className="text-right py-2 px-3 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                      1 Week
+                      {t.week1}
                     </th>
                     <th className="text-right py-2 px-3 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                      1 Month
+                      {t.month1}
                     </th>
                     <th className="text-right py-2 px-3 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                      3 Months
+                      {t.months3}
                     </th>
                     <th className="text-right py-2 px-3 text-[10px] uppercase tracking-wide text-gray-500 font-semibold">
-                      1 Year
+                      {t.year1}
                     </th>
                   </tr>
                 </thead>
@@ -647,8 +743,8 @@ export default function MondayBriefDocument() {
         <div className="mb-4">
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             <div className="px-4 py-3 border-b border-gray-100">
-              <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wide">
-                Week Ahead Radar
+              <h2 className="text-sm font-bold text-[#e31e24] uppercase tracking-wide">
+                {t.weekAhead}
               </h2>
             </div>
             <div className="divide-y divide-gray-100">
@@ -679,13 +775,13 @@ export default function MondayBriefDocument() {
       <div className="mb-4">
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-gray-100">
-            <h2 className="text-sm font-bold text-blue-600 uppercase tracking-wide">
-              Regulatory Corner
+            <h2 className="text-sm font-bold text-[#e31e24] uppercase tracking-wide">
+              {t.regulatoryCorner}
             </h2>
           </div>
           <div className="px-4 py-3">
             <p className="text-xs text-gray-700 leading-relaxed">
-              {brief.regulatoryCorner || 'No major regulatory updates this week.'}
+              {brief.regulatoryCorner || t.noRegulatory}
             </p>
           </div>
         </div>

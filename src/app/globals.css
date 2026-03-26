@@ -53,6 +53,10 @@ input[type='range']::-moz-range-thumb {
     background: white !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    color-adjust: exact;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   header,
@@ -64,6 +68,20 @@ input[type='range']::-moz-range-thumb {
 
   main {
     min-height: auto !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Hide all page chrome, keep only the document */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Remove outer page padding for print */
+  .max-w-7xl {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
   /* Avoid breaking inside cards */
@@ -72,25 +90,61 @@ input[type='range']::-moz-range-thumb {
     break-inside: avoid;
   }
 
-  /* Monday Brief print layout */
+  /* Monday Brief print layout — single column, print-optimised */
   .monday-brief-page {
-    font-size: 11px;
+    font-size: 10px;
     line-height: 1.4;
+    width: 100%;
+    max-width: 100%;
   }
 
   .monday-brief-page .page-break {
     break-after: page;
+    margin: 0 !important;
+    height: 0 !important;
   }
 
-  .no-print {
-    display: none !important;
+  /* Force single column for print (except market pulse) */
+  .monday-brief-page .grid:not(.market-pulse-grid) {
+    display: block !important;
+  }
+
+  .monday-brief-page .grid:not(.market-pulse-grid) > * {
+    margin-bottom: 8px;
+    width: 100% !important;
+  }
+
+  /* Market pulse grid stays multi-column (small tiles) */
+  .monday-brief-page .market-pulse-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
   }
 
   .monday-brief-page table {
     break-inside: avoid;
+    width: 100% !important;
   }
 
   .monday-brief-page .hero-card {
     break-inside: avoid;
+    margin-bottom: 8px;
+  }
+
+  /* Tighten padding for print */
+  .monday-brief-page .px-6 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .monday-brief-page .py-4 {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  /* Ensure background colours print for HDFC red headers */
+  .bg-\[\#e31e24\] {
+    background-color: #e31e24 !important;
+    color: white !important;
   }
 }
