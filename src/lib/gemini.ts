@@ -311,7 +311,12 @@ export async function generateMondayBrief(
     .map((f) => `${f.name} (${f.subCategory}) — AUM: ₹${f.aumCrores} Cr | 1Y: ${f.return1Y ?? 'N/A'}% | 3Y: ${f.return3Y ?? 'N/A'}% | 5Y: ${f.return5Y ?? 'N/A'}%`)
     .join('\n');
 
-  const prompt = `You are "Mutual Fund Dost", creating the MONDAY MORNING BRIEF for Indian mutual fund distributors. This is a premium weekly document that makes distributors look brilliant in front of their clients.
+  // TWO-PASS GENERATION
+  // Pass 1: English-only content (shorter prompt = reliable structure + counts)
+  // Pass 2: Hindi translations only (focused task = 100% _hi field coverage)
+
+  // ── PASS 1: English-only brief ────────────────────────────────────────────
+  const pass1Prompt = `You are "Mutual Fund Dost", creating the MONDAY MORNING BRIEF for Indian mutual fund distributors. This is a premium weekly document that makes distributors look brilliant in front of their clients.
 
 Today's date: ${new Date().toISOString().split('T')[0]}
 Week of: ${weekOf}
@@ -331,8 +336,9 @@ IMPORTANT RULES:
 - HDFC Flexi Cap Fund and HDFC Balanced Advantage Fund are the flagship funds — give them hero treatment
 - Never give specific investment advice — frame as conversation starters
 - Include SEBI compliance language where needed
+- Return EXACTLY 3 topStories, EXACTLY 3 actionPlan items, EXACTLY 3 conversationScripts (The Panicking Client, The SIP Investor, The New Prospect)
 
-Return a JSON object with this EXACT structure:
+Return a JSON object with this EXACT structure (English only — no Hindi fields):
 
 {
   "marketPulse": [
@@ -344,73 +350,52 @@ Return a JSON object with this EXACT structure:
     {"label": "FII Flow (₹ Cr)", "value": "-12,450", "change": "", "direction": "down"},
     {"label": "DII Flow (₹ Cr)", "value": "+9,800", "change": "", "direction": "up"}
   ],
-  "niftyWeekSummary": "Brief 1-line describing the week's Nifty trajectory shape (e.g., 'Steady decline all week with Friday selloff')",
-  "niftyWeekSummary_hi": "Nifty की इस सप्ताह की दिशा का हिंदी विवरण",
-  "bigPicture": "2 short paragraphs, max 100 words total. Written like a senior colleague briefing an MFD distributor before their Monday calls — concrete, numbers-driven, no padding.",
+  "niftyWeekSummary": "Brief 1-line describing the week's Nifty trajectory shape",
+  "bigPicture": "2 short paragraphs, max 100 words total. Written like a senior colleague briefing an MFD distributor — concrete, numbers-driven, no padding.",
   "topStories": [
     {
       "title": "Headline",
-      "title_hi": "Hindi headline in Devanagari",
       "source": "Source",
       "category": "macro|sector|regulatory|market|geopolitical|company",
       "urgency": "high|medium|low",
       "clientImplication": "1 sentence, max 20 words",
-      "clientImplication_hi": "Hindi translation of clientImplication in Devanagari script",
       "talkingPoints": ["point1", "point2"],
-      "talkingPoints_hi": ["Hindi point 1 in Devanagari", "Hindi point 2 in Devanagari"],
       "affectedClientSegments": ["retirees", "HNI clients", "SIP investors"]
     }
   ],
   "actionPlan": [
     {
       "task": "Specific actionable task",
-      "task_hi": "हिंदी में कार्य विवरण",
       "priority": "high|medium|low",
       "clientSegment": "Who this applies to",
-      "clientSegment_hi": "हिंदी में ग्राहक वर्ग",
       "timing": "Monday|Tuesday|Mid-week|By Friday",
-      "timing_hi": "सोमवार|मंगलवार|सप्ताह के मध्य में|शुक्रवार तक",
-      "context": "1-line why this matters now",
-      "context_hi": "हिंदी में एक पंक्ति में क्यों यह महत्वपूर्ण है"
+      "context": "1-line why this matters now"
     }
   ],
   "conversationScripts": [
     {
       "persona": "The Panicking Client",
-      "persona_hi": "घबराया हुआ निवेशक",
       "opener": "Natural opening line to use",
-      "opener_hi": "Hindi opener in Devanagari script",
       "talkingPoints": ["point1", "point2", "point3"],
-      "talkingPoints_hi": ["Hindi point 1 in Devanagari", "Hindi point 2 in Devanagari", "Hindi point 3 in Devanagari"],
       "objectionHandler": "When they say 'but the market is crashing...' respond with...",
-      "objectionHandler_hi": "Hindi objection handler in Devanagari script",
       "suggestedFund": "HDFC fund to mention in context"
     },
     {
       "persona": "The SIP Investor",
-      "persona_hi": "एसआईपी निवेशक",
       "opener": "...",
-      "opener_hi": "...",
       "talkingPoints": ["..."],
-      "talkingPoints_hi": ["..."],
       "objectionHandler": "...",
-      "objectionHandler_hi": "...",
       "suggestedFund": "..."
     },
     {
       "persona": "The New Prospect",
-      "persona_hi": "नया संभावित ग्राहक",
       "opener": "...",
-      "opener_hi": "...",
       "talkingPoints": ["..."],
-      "talkingPoints_hi": ["..."],
       "objectionHandler": "...",
-      "objectionHandler_hi": "...",
       "suggestedFund": "..."
     }
   ],
-  "sipWinsStat": "A powerful stat like: 'A client who started a ₹10,000 SIP in HDFC Flexi Cap Fund during the March 2020 crash now has ₹X.XX lakhs (XX% XIRR). Markets recover — SIPs make sure your clients are there when they do.'",
-  "sipWinsStat_hi": "Hindi translation of sipWinsStat in Devanagari script",
+  "sipWinsStat": "A powerful stat about SIP investing through market cycles",
   "fundSpotlights": [
     {
       "fundName": "HDFC Flexi Cap Fund",
@@ -419,13 +404,9 @@ Return a JSON object with this EXACT structure:
       "return3Y": "22.9%",
       "return5Y": "21.0%",
       "categoryRank": "Rank X/35 in Flexi Cap",
-      "categoryRank_hi": "फ्लेक्सी कैप में रैंक X/35",
       "whyThisWeek": "Why this fund is relevant given this week's market conditions",
-      "whyThisWeek_hi": "इस सप्ताह के बाजार में यह फंड क्यों प्रासंगिक है",
       "elevatorPitch": "30-second pitch a distributor can use with a client",
-      "elevatorPitch_hi": "30 सेकंड की पिच जो डिस्ट्रीब्यूटर ग्राहक के साथ उपयोग कर सकते हैं",
-      "sipStory": "₹1 lakh invested 10 years ago is now ₹X.XX lakhs",
-      "sipStory_hi": "10 साल पहले ₹1 लाख का निवेश अब ₹X.XX लाख है"
+      "sipStory": "₹1 lakh invested 10 years ago is now ₹X.XX lakhs"
     },
     {
       "fundName": "HDFC Balanced Advantage Fund",
@@ -434,13 +415,9 @@ Return a JSON object with this EXACT structure:
       "return3Y": "...",
       "return5Y": "...",
       "categoryRank": "...",
-      "categoryRank_hi": "...",
-      "whyThisWeek": "Include current equity/debt allocation and how the fund auto-managed risk during the week's volatility",
-      "whyThisWeek_hi": "...",
+      "whyThisWeek": "Include current equity/debt allocation and how the fund auto-managed risk",
       "elevatorPitch": "...",
-      "elevatorPitch_hi": "...",
-      "sipStory": "...",
-      "sipStory_hi": "..."
+      "sipStory": "..."
     }
   ],
   "fundHeatmap": [
@@ -456,56 +433,105 @@ Return a JSON object with this EXACT structure:
     {
       "date": "Mon 17 Mar",
       "event": "Event description",
-      "event_hi": "हिंदी में घटना का विवरण",
       "impact": "Potential market impact",
-      "impact_hi": "हिंदी में संभावित बाजार प्रभाव",
-      "actionTrigger": "If X happens, discuss Y with Z clients",
-      "actionTrigger_hi": "यदि X हो, तो Z ग्राहकों के साथ Y पर चर्चा करें"
+      "actionTrigger": "If X happens, discuss Y with Z clients"
     }
   ],
-  "regulatoryCorner": "Any SEBI/AMFI updates, NFO launches, scheme changes, or tax-related deadlines. If nothing notable, say 'No major regulatory updates this week.'",
-  "regulatoryCorner_hi": "Hindi translation of regulatoryCorner in Devanagari script",
-  "weeklyWisdom": "One motivational or educational quote relevant to the week's context",
-  "weeklyWisdom_hi": "Hindi translation of weeklyWisdom in Devanagari script",
-  "bigPicture_hi": "Hindi translation of bigPicture in Devanagari script"
+  "regulatoryCorner": "Any SEBI/AMFI updates, NFO launches, scheme changes, or tax-related deadlines. If nothing notable: 'No major regulatory updates this week.'",
+  "weeklyWisdom": "One motivational or educational quote relevant to the week's context"
 }
-
-Include exactly 3 top stories (no more, no fewer). Include exactly 3 action items. Include exactly 3 conversation scripts (The Panicking Client, The SIP Investor, The New Prospect only).
-
-For all _hi fields: write natural, conversational Hindi in Devanagari script. This is NOT a word-for-word translation — adapt for a distributor reading on their phone in a Tier 2 city. Use clear, simple Hindi. Avoid Anglicized jargon where Hindi equivalents exist: बाज़ार (market), निवेश (investment), ग्राहक (client), रिटर्न (return — keep this one), एसआईपी (SIP — keep this one).
 
 CRITICAL: Use actual numbers from the fund data provided. For fund returns, use the EXACT numbers from the fund data above. For marketPulse data (Nifty, Sensex, VIX, Gold, FII/DII flows): only populate values you can DIRECTLY derive from the news items provided. If a metric is not mentioned in the news, set value to "N/A" and change to "". Do NOT estimate, extrapolate, or guess market index levels — this is displayed to professional distributors who will spot fabricated data.`;
 
-  const result = await geminiModel.generateContent(prompt);
-  const text = result.response.text();
-
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    throw new Error('Failed to parse Monday Brief response as JSON');
+  const pass1Result = await geminiModel.generateContent(pass1Prompt);
+  const pass1Text = pass1Result.response.text();
+  const pass1Match = pass1Text.match(/\{[\s\S]*\}/);
+  if (!pass1Match) {
+    throw new Error('Failed to parse Monday Brief (pass 1) response as JSON');
   }
+  const english = JSON.parse(pass1Match[0]);
 
-  const parsed = JSON.parse(jsonMatch[0]);
+  // Enforce count constraints from pass 1
+  const topStoriesEn: WeeklyStory[] = (english.topStories || []).slice(0, 3);
+  const actionPlanEn: ClientActionItem[] = (english.actionPlan || []).slice(0, 3);
+  const conversationScriptsEn: ConversationScript[] = (english.conversationScripts || []).slice(0, 3);
+  const fundSpotlightsEn: FundSpotlight[] = english.fundSpotlights || [];
+  const weekAheadEn: WeekAheadEvent[] = english.weekAhead || [];
 
+  // ── PASS 2: Hindi translations only ───────────────────────────────────────
+  const pass2Prompt = `You are a Hindi translator for a mutual fund distributor platform. Translate the following English content into natural, conversational Hindi in Devanagari script.
+
+RULES:
+- Write natural Hindi (not word-for-word translation) for Tier 2 city distributors reading on mobile
+- Use simple vocabulary: बाज़ार (market), निवेश (investment), ग्राहक (client)
+- Keep as-is: रिटर्न (return), एसआईपी (SIP), fund names in English, numbers/percentages in English
+- Every single field MUST be filled — do NOT leave any field as "..." or empty
+
+English content to translate:
+${JSON.stringify({
+    niftyWeekSummary: english.niftyWeekSummary,
+    bigPicture: english.bigPicture,
+    sipWinsStat: english.sipWinsStat,
+    regulatoryCorner: english.regulatoryCorner,
+    weeklyWisdom: english.weeklyWisdom,
+    topStories: topStoriesEn.map((s) => ({ title: s.title, clientImplication: s.clientImplication, talkingPoints: s.talkingPoints })),
+    actionPlan: actionPlanEn.map((a) => ({ task: a.task, clientSegment: a.clientSegment, timing: a.timing, context: a.context })),
+    conversationScripts: conversationScriptsEn.map((c) => ({ persona: c.persona, opener: c.opener, talkingPoints: c.talkingPoints, objectionHandler: c.objectionHandler })),
+    fundSpotlights: fundSpotlightsEn.map((f) => ({ fundName: f.fundName, categoryRank: f.categoryRank, whyThisWeek: f.whyThisWeek, elevatorPitch: f.elevatorPitch, sipStory: f.sipStory })),
+    weekAhead: weekAheadEn.map((w) => ({ event: w.event, impact: w.impact, actionTrigger: w.actionTrigger })),
+  }, null, 2)}
+
+Return a JSON object with ONLY these Hindi translation fields (arrays must match the same length as the English input):
+{
+  "niftyWeekSummary_hi": "...",
+  "bigPicture_hi": "...",
+  "sipWinsStat_hi": "...",
+  "regulatoryCorner_hi": "...",
+  "weeklyWisdom_hi": "...",
+  "topStories": [
+    {"title_hi": "...", "clientImplication_hi": "...", "talkingPoints_hi": ["...", "..."]}
+  ],
+  "actionPlan": [
+    {"task_hi": "...", "clientSegment_hi": "...", "timing_hi": "...", "context_hi": "..."}
+  ],
+  "conversationScripts": [
+    {"persona_hi": "...", "opener_hi": "...", "talkingPoints_hi": ["..."], "objectionHandler_hi": "..."}
+  ],
+  "fundSpotlights": [
+    {"categoryRank_hi": "...", "whyThisWeek_hi": "...", "elevatorPitch_hi": "...", "sipStory_hi": "..."}
+  ],
+  "weekAhead": [
+    {"event_hi": "...", "impact_hi": "...", "actionTrigger_hi": "..."}
+  ]
+}`;
+
+  const pass2Result = await geminiModel.generateContent(pass2Prompt);
+  const pass2Text = pass2Result.response.text();
+  const pass2Match = pass2Text.match(/\{[\s\S]*\}/);
+  // If pass 2 fails, we still return a brief — Hindi fields will be undefined
+  const hindi = pass2Match ? JSON.parse(pass2Match[0]) : {};
+
+  // ── Merge English + Hindi ──────────────────────────────────────────────────
   return {
     weekOf,
     generatedAt: new Date().toISOString(),
-    marketPulse: parsed.marketPulse || [],
-    niftyWeekSummary: parsed.niftyWeekSummary || '',
-    niftyWeekSummary_hi: parsed.niftyWeekSummary_hi,
-    bigPicture: parsed.bigPicture || '',
-    bigPicture_hi: parsed.bigPicture_hi,
-    topStories: parsed.topStories || [],
-    actionPlan: parsed.actionPlan || [],
-    conversationScripts: parsed.conversationScripts || [],
-    sipWinsStat: parsed.sipWinsStat || '',
-    sipWinsStat_hi: parsed.sipWinsStat_hi,
-    fundSpotlights: parsed.fundSpotlights || [],
-    fundHeatmap: parsed.fundHeatmap || [],
-    weekAhead: parsed.weekAhead || [],
-    regulatoryCorner: parsed.regulatoryCorner || '',
-    regulatoryCorner_hi: parsed.regulatoryCorner_hi,
-    weeklyWisdom: parsed.weeklyWisdom || '',
-    weeklyWisdom_hi: parsed.weeklyWisdom_hi,
+    marketPulse: english.marketPulse || [],
+    niftyWeekSummary: english.niftyWeekSummary || '',
+    niftyWeekSummary_hi: hindi.niftyWeekSummary_hi,
+    bigPicture: english.bigPicture || '',
+    bigPicture_hi: hindi.bigPicture_hi,
+    topStories: topStoriesEn.map((s, i) => ({ ...s, ...(hindi.topStories?.[i] || {}) })),
+    actionPlan: actionPlanEn.map((a, i) => ({ ...a, ...(hindi.actionPlan?.[i] || {}) })),
+    conversationScripts: conversationScriptsEn.map((c, i) => ({ ...c, ...(hindi.conversationScripts?.[i] || {}) })),
+    sipWinsStat: english.sipWinsStat || '',
+    sipWinsStat_hi: hindi.sipWinsStat_hi,
+    fundSpotlights: fundSpotlightsEn.map((f, i) => ({ ...f, ...(hindi.fundSpotlights?.[i] || {}) })),
+    fundHeatmap: english.fundHeatmap || [],
+    weekAhead: weekAheadEn.map((w, i) => ({ ...w, ...(hindi.weekAhead?.[i] || {}) })),
+    regulatoryCorner: english.regulatoryCorner || '',
+    regulatoryCorner_hi: hindi.regulatoryCorner_hi,
+    weeklyWisdom: english.weeklyWisdom || '',
+    weeklyWisdom_hi: hindi.weeklyWisdom_hi,
   };
 }
 
