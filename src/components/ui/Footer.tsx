@@ -8,15 +8,15 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">M</span>
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">H</span>
               </div>
               <span className="text-white font-bold text-lg">
-                Mutual Fund Dost
+                HDFC MFD Hub
               </span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Your trusted guide for XYZ Mutual Fund investments. We help
+              Your trusted guide for HDFC Mutual Fund investments. We help
               Indian investors make informed decisions for long-term wealth
               creation.
             </p>
@@ -26,6 +26,22 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
+              <li>
+                <Link
+                  href="/monday-brief"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Monday Brief
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/funds"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Fund Dashboard
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/news"
@@ -49,7 +65,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
-                  XYZ Mutual Fund Official
+                  HDFC Mutual Fund Official
                 </a>
               </li>
               <li>
@@ -81,8 +97,8 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} Mutual Fund Dost. Not affiliated
-            with XYZ Asset Management Company Ltd. All fund data is sourced
+            &copy; {new Date().getFullYear()} HDFC MFD Hub. Not affiliated
+            with HDFC Asset Management Company Ltd. All fund data is sourced
             from publicly available information.
           </p>
         </div>
