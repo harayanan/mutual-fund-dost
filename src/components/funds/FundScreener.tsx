@@ -226,7 +226,7 @@ export default function FundScreener() {
               placeholder="Search by fund name, category, or manager..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
             {search && (
               <button
@@ -242,7 +242,7 @@ export default function FundScreener() {
             onClick={() => setShowFilters(!showFilters)}
             className={`inline-flex items-center gap-2 px-4 py-2.5 border rounded-lg text-sm font-medium transition-colors ${
               showFilters || activeFilters > 0
-                ? 'bg-red-50 border-red-200 text-red-700'
+                ? 'bg-blue-50 border-blue-200 text-blue-700'
                 : 'border-gray-200 text-gray-700 hover:bg-gray-50'
             }`}
           >
@@ -258,7 +258,7 @@ export default function FundScreener() {
           {compareList.length > 0 && (
             <button
               onClick={() => setShowCompare(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
             >
               <GitCompareArrows className="w-4 h-4" />
               Compare ({compareList.length})
@@ -295,7 +295,7 @@ export default function FundScreener() {
                   if (e.target.value) track('fund_screener_filter', { filter_type: 'risk_level', value: e.target.value });
                   setRiskLevel(e.target.value);
                 }}
-                className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-3 py-2 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {RISK_LEVELS.map((r) => (
                   <option key={r.value} value={r.value}>
@@ -310,7 +310,7 @@ export default function FundScreener() {
                   setSelectedCategories(new Set());
                   setRiskLevel('');
                 }}
-                className="text-sm text-red-500 hover:text-red-700 font-medium"
+                className="text-sm text-gray-500 hover:text-gray-700 font-medium"
               >
                 Clear all filters
               </button>
@@ -325,7 +325,7 @@ export default function FundScreener() {
               Showing <strong className="text-gray-900">{filtered.length}</strong>{' '}
               of {HDFC_FUNDS.length} HDFC funds
             </span>
-            <span className="bg-red-50 text-red-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+            <span className="bg-blue-50 text-blue-700 text-[10px] font-semibold px-2 py-0.5 rounded-full">
               Direct Plans
             </span>
             {lastUpdated && (
@@ -373,7 +373,7 @@ export default function FundScreener() {
             onClick={() => toggleSort(field)}
             className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
               sortField === field
-                ? 'bg-red-600 text-white'
+                ? 'bg-blue-600 text-white'
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
@@ -408,7 +408,7 @@ export default function FundScreener() {
               {filtered.map((fund) => (
                 <tr
                   key={fund.id}
-                  className="border-b border-gray-100 hover:bg-red-50/30 transition-colors"
+                  className="border-b border-gray-100 hover:bg-blue-50/30 transition-colors"
                 >
                   <td className="px-3 py-3 text-center">
                     <input
@@ -416,7 +416,7 @@ export default function FundScreener() {
                       checked={compareList.includes(fund.id)}
                       onChange={() => toggleCompare(fund.id)}
                       disabled={!compareList.includes(fund.id) && compareList.length >= 4}
-                      className="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500 cursor-pointer disabled:opacity-30"
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                     />
                   </td>
                   <td className="px-3 py-3">
@@ -584,7 +584,7 @@ export default function FundScreener() {
           </span>
           <button
             onClick={() => setShowCompare(true)}
-            className="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
           >
             Compare Now
           </button>
@@ -639,7 +639,7 @@ function ThSort({
       onClick={() => onSort(field)}
     >
       <div
-        className={`inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider ${active ? 'text-red-600' : 'text-gray-500'}`}
+        className={`inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider ${active ? 'text-blue-600' : 'text-gray-500'}`}
       >
         {label}
         {active ? (

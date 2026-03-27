@@ -31,7 +31,7 @@ export default function MondayBriefPage() {
       <div className="mb-8 no-print">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#e31e24] rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -60,14 +60,14 @@ export default function MondayBriefPage() {
         </div>
 
         {/* Info box */}
-        <div className="bg-red-50 border border-red-100 rounded-xl p-4 mt-4">
+        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mt-4">
           <div className="flex items-start gap-2">
-            <Info className="w-5 h-5 text-[#e31e24] flex-shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm text-red-900 font-medium mb-1">
+              <p className="text-sm text-blue-900 font-medium mb-1">
                 {lang === 'hi' ? 'आपकी साप्ताहिक प्रीमियम पुस्तिका' : 'Your Premium Weekly Playbook'}
               </p>
-              <p className="text-xs text-red-700 leading-relaxed">
+              <p className="text-xs text-blue-700 leading-relaxed">
                 {lang === 'hi'
                   ? 'इस सप्ताह के ग्राहक संवाद के लिए सब कुछ एक प्रिंट-रेडी दस्तावेज़ में। बाज़ार का संदर्भ, मुख्य खबरें, कार्य योजना, बातचीत की स्क्रिप्ट, और आने वाले सप्ताह का रडार। AI-निर्मित — ग्राहकों से बात करने से पहले बाज़ार डेटा सत्यापित करें।'
                   : 'Everything you need for client conversations this week in one print-ready document. Market context, top stories with talking points, a full action plan, conversation scripts for 3 client personas, star fund highlights, and a week-ahead radar. AI-generated — verify market data before client calls.'}
@@ -80,7 +80,7 @@ export default function MondayBriefPage() {
         <div className="mt-4 flex justify-end">
           <button
             onClick={() => { track('monday_brief_printed', { language: lang }); window.print(); }}
-            className="inline-flex items-center gap-2 bg-[#e31e24] text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium shadow-sm"
+            className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
           >
             <Printer className="w-4 h-4" />
             {lang === 'hi' ? 'PDF डाउनलोड करें' : 'Download PDF'}

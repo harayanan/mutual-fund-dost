@@ -275,14 +275,14 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
   // ─── Error ─────────────────────────────────────────────────────────────
   if (error && !brief) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center no-print">
-        <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-3" />
-        <h3 className="text-lg font-semibold text-red-800 mb-2">Unable to Load Monday Brief</h3>
-        <p className="text-sm text-red-600 mb-4">{error}</p>
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-8 text-center no-print">
+        <AlertCircle className="w-12 h-12 text-blue-400 mx-auto mb-3" />
+        <h3 className="text-lg font-semibold text-blue-800 mb-2">Unable to Load Monday Brief</h3>
+        <p className="text-sm text-blue-600 mb-4">{error}</p>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="inline-flex items-center gap-2 bg-[#e31e24] text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium disabled:opacity-50"
+          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           {refreshing ? t.generating : t.generateBrief}
@@ -300,7 +300,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="inline-flex items-center gap-2 bg-[#e31e24] text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm font-medium disabled:opacity-50"
+          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium disabled:opacity-50"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           {refreshing ? t.generating : t.generateBrief}
@@ -340,7 +340,7 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="inline-flex items-center gap-1.5 text-xs text-[#e31e24] hover:text-red-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
             {refreshing ? t.refreshing : t.refresh}
@@ -353,13 +353,13 @@ export default function MondayBriefDocument({ lang = 'en' }: { lang?: 'en' | 'hi
          ═══════════════════════════════════════════════════════════════════ */}
 
       {/* Document Header */}
-      <div className="bg-[#e31e24] text-white rounded-t-xl px-6 py-4 mb-0">
+      <div className="bg-blue-700 text-white rounded-t-xl px-6 py-4 mb-0">
         <h1 className="text-lg sm:text-xl font-bold tracking-wide uppercase">
           {t.title}
         </h1>
         <div className="flex items-center justify-between mt-1">
-          <p className="text-red-100 text-xs sm:text-sm">{t.weekOf} {weekRange}</p>
-          <p className="text-red-200 text-xs font-medium">{t.brandName}</p>
+          <p className="text-blue-100 text-xs sm:text-sm">{t.weekOf} {weekRange}</p>
+          <p className="text-blue-200 text-xs font-medium">{t.brandName}</p>
         </div>
       </div>
 

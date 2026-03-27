@@ -13,7 +13,7 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-lg">H</span>
             </div>
             <div>
@@ -33,31 +33,31 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/monday-brief"
-              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
             >
               Monday Brief
             </Link>
             <Link
               href="/funds"
-              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
             >
               Fund Dashboard
             </Link>
             <Link
               href="/discover"
-              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
             >
               Fund Finder
             </Link>
             <Link
               href="/news"
-              className="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors"
             >
               News Insights
             </Link>
             <Link
               href="/monday-brief"
-              className="bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               This Week&apos;s Brief
             </Link>
@@ -83,35 +83,35 @@ export default function Header() {
             <nav className="flex flex-col gap-3">
               <Link
                 href="/monday-brief"
-                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Monday Brief
               </Link>
               <Link
                 href="/funds"
-                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Fund Dashboard
               </Link>
               <Link
                 href="/discover"
-                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Fund Finder
               </Link>
               <Link
                 href="/news"
-                className="text-sm font-medium text-gray-700 hover:text-red-600 py-2"
+                className="text-sm font-medium text-gray-700 hover:text-blue-600 py-2"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 News Insights
               </Link>
               <Link
                 href="/monday-brief"
-                className="bg-red-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-red-700 text-center"
+                className="bg-blue-600 text-white text-sm font-medium px-4 py-2.5 rounded-lg hover:bg-blue-700 text-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 This Week&apos;s Brief

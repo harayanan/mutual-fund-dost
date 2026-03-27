@@ -28,12 +28,12 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-red-700 via-red-800 to-red-900 text-white">
+      <section className="bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-sm text-red-100">
+              <span className="text-sm text-blue-100">
                 AI-powered tools for HDFC Mutual Fund Distributors
               </span>
             </div>
@@ -46,7 +46,7 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-red-100 leading-relaxed mb-8 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-blue-100 leading-relaxed mb-8 max-w-2xl mx-auto">
               Every Monday morning, get your complete playbook: market context, fund performance,
               client scripts, and talking points. Built exclusively for HDFC MF distributors.
             </p>
@@ -54,7 +54,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/monday-brief"
-                className="inline-flex items-center justify-center gap-2 bg-white text-red-700 font-bold px-8 py-4 rounded-xl hover:bg-red-50 transition-colors text-lg"
+                className="inline-flex items-center justify-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors text-lg"
               >
                 <Calendar className="w-5 h-5" />
                 This Week&apos;s Brief
@@ -83,11 +83,11 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Monday Brief */}
             <Link href="/monday-brief" className="group">
-              <div className="bg-gradient-to-br from-slate-50 to-red-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-red-300">
-                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-br from-slate-50 to-blue-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-blue-300">
+                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
                   <Calendar className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
@@ -105,7 +105,7 @@ export default function Home() {
                     'Ready-made client scripts',
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
-                      <div className="w-1.5 h-1.5 bg-red-500 rounded-full" />
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                       {item}
                     </li>
                   ))}
@@ -143,8 +143,8 @@ export default function Home() {
 
             {/* News Insights */}
             <Link href="/news" className="group">
-              <div className="bg-gradient-to-br from-slate-50 to-indigo-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-indigo-300">
-                <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-4">
+              <div className="bg-gradient-to-br from-slate-50 to-blue-50 border border-gray-200 rounded-2xl p-6 h-full hover:shadow-xl transition-all group-hover:border-blue-300">
+                <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
                   <Newspaper className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">
@@ -161,7 +161,7 @@ export default function Home() {
                     'Daily refresh at 1 AM IST',
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-2 text-xs text-gray-600">
-                      <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />
+                      <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />
                       {item}
                     </li>
                   ))}
@@ -228,7 +228,7 @@ export default function Home() {
                 key={item.title}
                 className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow"
               >
-                <item.icon className="w-8 h-8 text-red-600 mb-4" />
+                <item.icon className="w-8 h-8 text-blue-600 mb-4" />
                 <h3 className="text-base font-bold text-gray-900 mb-2">{item.title}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
               </div>
@@ -249,7 +249,7 @@ export default function Home() {
           </p>
           <Link
             href="/monday-brief"
-            className="inline-flex items-center justify-center gap-2 bg-red-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-red-700 transition-colors text-lg"
+            className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-700 transition-colors text-lg"
           >
             <Calendar className="w-5 h-5" />
             Get This Week&apos;s Brief
@@ -265,19 +265,19 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl font-bold text-red-400">60</div>
+              <div className="text-3xl font-bold text-blue-400">60</div>
               <div className="text-sm text-gray-400 mt-1">HDFC Funds Tracked</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-red-400">5</div>
+              <div className="text-3xl font-bold text-blue-400">5</div>
               <div className="text-sm text-gray-400 mt-1">Sections Per Brief</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-red-400">2</div>
+              <div className="text-3xl font-bold text-blue-400">2</div>
               <div className="text-sm text-gray-400 mt-1">Languages (EN + HI)</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-red-400">Every Monday</div>
+              <div className="text-3xl font-bold text-blue-400">Every Monday</div>
               <div className="text-sm text-gray-400 mt-1">Fresh Brief</div>
             </div>
           </div>
