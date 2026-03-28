@@ -4,6 +4,30 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export const geminiModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
+/**
+ * Call Gemini with retry + exponential backoff for rate-limit (429) errors.
+ * Retries up to 3 times with 2s / 4s / 8s delays.
+ */
+async function geminiWithRetry(prompt: string, maxRetries = 3): Promise<string> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await geminiModel.generateContent(prompt);
+      return result.response.text();
+    } catch (err: unknown) {
+      const isRateLimit =
+        err instanceof Error &&
+        (err.message.includes('429') ||
+         err.message.toLowerCase().includes('rate limit') ||
+         err.message.toLowerCase().includes('resource exhausted'));
+      if (!isRateLimit || attempt === maxRetries) throw err;
+      const delaySec = Math.pow(2, attempt + 1); // 2s, 4s, 8s
+      console.warn(`Gemini rate-limited (attempt ${attempt + 1}/${maxRetries}), retrying in ${delaySec}s…`);
+      await new Promise((r) => setTimeout(r, delaySec * 1000));
+    }
+  }
+  throw new Error('Unreachable');
+}
+
 export async function analyzeNewsForInvestors(newsItems: { title: string; summary: string; source: string }[]) {
   const newsText = newsItems
     .map((n, i) => `${i + 1}. [${n.source}] ${n.title}\n   ${n.summary}`)
@@ -443,8 +467,7 @@ Return a JSON object with this EXACT structure (English only — no Hindi fields
 
 CRITICAL: Use actual numbers from the fund data provided. For fund returns, use the EXACT numbers from the fund data above. For marketPulse data (Nifty, Sensex, VIX, Gold, FII/DII flows): only populate values you can DIRECTLY derive from the news items provided. If a metric is not mentioned in the news, set value to "N/A" and change to "". Do NOT estimate, extrapolate, or guess market index levels — this is displayed to professional distributors who will spot fabricated data.`;
 
-  const pass1Result = await geminiModel.generateContent(pass1Prompt);
-  const pass1Text = pass1Result.response.text();
+  const pass1Text = await geminiWithRetry(pass1Prompt);
   const pass1Match = pass1Text.match(/\{[\s\S]*\}/);
   if (!pass1Match) {
     throw new Error('Failed to parse Monday Brief (pass 1) response as JSON');
@@ -505,11 +528,18 @@ Return a JSON object with ONLY these Hindi translation fields (arrays must match
   ]
 }`;
 
-  const pass2Result = await geminiModel.generateContent(pass2Prompt);
-  const pass2Text = pass2Result.response.text();
-  const pass2Match = pass2Text.match(/\{[\s\S]*\}/);
-  // If pass 2 fails, we still return a brief — Hindi fields will be undefined
-  const hindi = pass2Match ? JSON.parse(pass2Match[0]) : {};
+  // Brief delay before pass 2 to avoid back-to-back rate-limit pressure
+  await new Promise((r) => setTimeout(r, 2000));
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let hindi: any = {};
+  try {
+    const pass2Text = await geminiWithRetry(pass2Prompt);
+    const pass2Match = pass2Text.match(/\{[\s\S]*\}/);
+    hindi = pass2Match ? JSON.parse(pass2Match[0]) : {};
+  } catch (err) {
+    console.warn('Monday Brief pass 2 (Hindi) failed, continuing without translations:', err);
+  }
 
   // ── Merge English + Hindi ──────────────────────────────────────────────────
   return {
