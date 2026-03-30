@@ -79,6 +79,14 @@ CREATE TABLE IF NOT EXISTS mfd_daily_briefs (
   generated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- ============ MONDAY BRIEFS TABLE ============
+CREATE TABLE IF NOT EXISTS mfd_monday_briefs (
+  week_of DATE PRIMARY KEY,
+  brief_data JSONB NOT NULL,
+  generated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- ============ INDEXES ============
 CREATE INDEX IF NOT EXISTS idx_mfd_funds_category ON mfd_funds(category);
 CREATE INDEX IF NOT EXISTS idx_mfd_funds_risk_level ON mfd_funds(risk_level);
@@ -86,6 +94,7 @@ CREATE INDEX IF NOT EXISTS idx_mfd_fund_performance_fund_id ON mfd_fund_performa
 CREATE INDEX IF NOT EXISTS idx_mfd_news_cache_created_at ON mfd_news_cache(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_mfd_news_cache_category ON mfd_news_cache(category);
 CREATE INDEX IF NOT EXISTS idx_mfd_daily_briefs_generated_at ON mfd_daily_briefs(generated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_mfd_monday_briefs_generated_at ON mfd_monday_briefs(generated_at DESC);
 
 -- ============ ROW LEVEL SECURITY ============
 ALTER TABLE mfd_funds ENABLE ROW LEVEL SECURITY;
@@ -93,6 +102,7 @@ ALTER TABLE mfd_fund_performance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mfd_news_cache ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mfd_data_metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE mfd_daily_briefs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mfd_monday_briefs ENABLE ROW LEVEL SECURITY;
 
 -- Funds: public read, service write
 CREATE POLICY "Allow public read on mfd_funds" ON mfd_funds FOR SELECT USING (true);
@@ -118,10 +128,16 @@ CREATE POLICY "Allow public read on mfd_daily_briefs" ON mfd_daily_briefs FOR SE
 CREATE POLICY "Allow insert on mfd_daily_briefs" ON mfd_daily_briefs FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow update on mfd_daily_briefs" ON mfd_daily_briefs FOR UPDATE USING (true);
 
+-- Monday Briefs: public read, service write
+CREATE POLICY "Allow public read on mfd_monday_briefs" ON mfd_monday_briefs FOR SELECT USING (true);
+CREATE POLICY "Allow insert on mfd_monday_briefs" ON mfd_monday_briefs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow update on mfd_monday_briefs" ON mfd_monday_briefs FOR UPDATE USING (true);
+
 -- ============ SEED METADATA ============
 INSERT INTO mfd_data_metadata (key, last_updated, status, details)
 VALUES
   ('fund_data', NOW(), 'pending', '{"message": "Awaiting first refresh"}'::jsonb),
   ('news_data', NOW(), 'pending', '{"message": "Awaiting first refresh"}'::jsonb),
-  ('daily_brief_data', NOW(), 'pending', '{"message": "Awaiting first refresh"}'::jsonb)
+  ('daily_brief_data', NOW(), 'pending', '{"message": "Awaiting first refresh"}'::jsonb),
+  ('monday_brief_data', NOW(), 'pending', '{"message": "Awaiting first refresh"}'::jsonb)
 ON CONFLICT (key) DO NOTHING;
